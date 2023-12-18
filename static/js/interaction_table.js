@@ -9,6 +9,7 @@ $(document).ready(function(){
                     //columns: columns,
                     dom: "lBfrtip",
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                    order: [[2, 'desc']],
 
                     //columns: columns
                     "scrollX": true//,

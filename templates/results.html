@@ -55,13 +55,15 @@
   <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  <!--<script type="text/javascript" src="{{ url_for('static',filename='js/graph_features.js') }}?v=3a6d41c782599fa0d45b06c29b75f4b6"></script>
-  <script type="text/javascript" src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static',filename='js/stat_charts.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static',filename='js/cytoscape-svg.js') }}"></script> -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/cyto_graph.js') }}?v=3a6d41c782599fa0d45b06c29b75f4b6"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/graph_features2.js') }}?v=3a6d41c782599fa0d45b06c29b75f4b6"></script>
+  <!--<script type="text/javascript" src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/stat_charts.js') }}"></script> -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/cytoscape-svg.js') }}"></script>
   <script type="text/javascript">
     /// Import files
 
+    var graph_json="{{ url_for('static', filename=graph_json)}}";
     var ints_json="{{ url_for('static', filename=ints_json)}}";
 
     var _paq = window._paq = window._paq || [];
@@ -76,7 +78,7 @@
       g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
     })();
   </script>
-  <!--<script type="text/javascript" src="{{ url_for('static',filename='js/cyto_graph.js') }}?v=7a756b1f1cbe008592b17dfe2376dc27"></script>-->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/cyto_graph.js') }}?v=7a756b1f1cbe008592b17dfe2376dc27"></script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/interaction_table.js') }}?v=61f545ab8292486a44323689c35d5362" async></script>
 
 </head>
@@ -88,46 +90,88 @@
     {% include "header.html" %}
 
     <div class="content" >
-      <!--
+
       <div class="network-container">
         <div class="control-panel">
-          <div class="collap-content">
+          <label class="container"
+            title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
+              Hide red edges
+              <input type="checkbox" id="toggle_red_edges">
+              <span class="checkmark"></span>
+            </label><br>
+          <label class="container"
+          title="Hide nodes which have no interactions with WeSA scores above the recommended WeSA threshold for the selected background dataset.">
+            Hide nodes with red links only
+            <input type="checkbox" id="filter_nodes">
+            <span class="checkmark"></span>
+          </label><br>
+          <!--<div id="elm_red_container" style="float: right;">
             <label class="container"
-            title="Show/hide boxes around proteins. These are just a visual aid and have no other meaning.">
-              Bounding Boxes
-              <input type="checkbox" id="toggle_box" checked="checked">
+            title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
+              Hide red edges
+              <input type="checkbox" id="toggle_red_edges">
+              <span class="checkmark"></span>
+            </label><br>
+          </div> -->
+            <label class="container"
+            title="Hide interactions which have not been observed previously (in the selected background dataset).">
+              Hide dashed edges
+              <input type="checkbox" id="hide_dashed_edges">
               <span class="checkmark"></span>
             </label><br>
 
             <label class="container"
-            title="Show/hide protein domains.&#013;Source: Pfam">
-              Domains
-              <input type="checkbox" id="toggle_doms" checked="checked">
+            title="Hide nodes which have no interactions which were observed in previous data.">
+              Hide previously unobserved nodes
+              <input type="checkbox" id="filter_nodes_solid">
               <span class="checkmark"></span>
-            </label></br>
+            </label><br>
 
-            <label class="container"
-            title="Show/hide protein linear motifs.&#013;Source: ELM, 3did">
-            Motifs
-            <input type="checkbox" id="toggle_elms">
-            <span class="checkmark"></span>
-            </label></br>
-            <div id="elm_confirmed_container" style="float: right; display: none;">
+            <button type="button" class="collap-section collap-active" fdprocessedid="jd3jok">
+            Threshold options
+            </button>
+            <div class="collap-content" style="display: block;">
+
               <label class="container"
-              title="Show only confirmed motif instances">
-                [Only confirmed]
-                <input type="checkbox" id="toggle_confirmed_elms">
+              title="Hide edges with score below the 1% FPR threshold (for the selected dataset).">
+                Threshold 1% FPR
+                <input type="checkbox" id="hide_fpr1_edges">
                 <span class="checkmark"></span>
-              </label></br>
+              </label><br>
+
               <label class="container"
-              title="Allow motifs inside domains">
-                [Only outside domains]
-                <input type="checkbox" id="toggle_motifs_in_doms">
+              title="Hide edges with score below the 5% FPR threshold (for the selected dataset).">
+                Threshold 5% FPR
+                <input type="checkbox" id="hide_fpr5_edges">
                 <span class="checkmark"></span>
-              </label></br>
+              </label><br>
+
+              <label class="container"
+              title="Hide edges with score below the 10% FPR threshold (for the selected dataset).">
+                Threshold 10% FPR
+                <input type="checkbox" id="hide_fpr10_edges">
+                <span class="checkmark"></span>
+              </label><br>
+
+              <label class="container"
+              title="Hide edges with score below the 20% FPR threshold (for the selected dataset).">
+                Threshold 20% FPR
+                <input type="checkbox" id="hide_fpr20_edges">
+                <span class="checkmark"></span>
+              </label><br>
+              <div id="elm_confirmed_container" style="float: right;">
+                <label class="container" title="Hide unconnected nodes">
+                  Hide unconnected proteins
+                  <input type="checkbox" id="hide_fpr20_nodes">
+                  <span class="checkmark"></span>
+                </label><br>
+              </div>
+
             </div>
-          </div>
 
+
+        </div>
+            <!--
           <div class="collap-content">
             <label class="container"
             title="Binary protein interactions supported by experimental evidence.&#013;Source: BioGRID">
@@ -234,8 +278,8 @@
               <input type="checkbox" id="toggle_glyc">
               <span class="checkmark">
             </label>
-          </div>
-
+          </div> -->
+          <!--
           <button type="button" class="collap-section">
             Variants
           </button>
@@ -256,11 +300,11 @@
           </div>
         </div>
 
+        <div class="network"> -->
         <div class="network">
-          <!--Only the first line is needed to generate the network--><!--
+            <!-- Cytoscape.js container -->
+            <!--Only the first line is needed to generate the network-->
           <div class="cytoscape_container" id="cy"></div>
-
-
           <div class="tools-widget">
             <button class="my-btn" id="help-btn" title="Help">
               <i class="far fa-question-circle"></i>
@@ -271,46 +315,43 @@
             <button class="my-btn" id="lock" title="Lock/unlock element positions">
               <i class="fa fa-unlock"></i>
             </button>
-            <button class="my-btn" id="reset" title="Reload graph">
-              <i class="fa fa-sync"></i>
-            </button>
-
           </div>
 
           <div class="dl-widget">
             <div id="dl-content">
+              <!--<button class="dl-btn-pic" id="dl_svg"
+              title="Download complete network as a vector graphic">
+                <i class="fas fa-file-download"></i> SVG
+              </button> -->
               <button class="dl-btn-pic" id="dl_jpg"
-              title="Take a snapshot of the current network view as JPG">
+              title="Take a snapshot of the current network view as JPG.">
                 <i class="fas fa-camera"></i> JPG
               </button>
               <button class="dl-btn-pic" id="dl_png"
-              title="Take a snapshot of the current network view as JPG">
+              title="Take a snapshot of the current network view as PNG.">
                 <i class="fas fa-camera"></i> PNG
               </button>
-              <button class="dl-btn-pic" id="dl_svg"
-              title="Download complete network as a vector graphic">
-                <i class="fas fa-file-download"></i> SVG
-              </button>
             </div>
-            <button class="my-btn dl-btn-off" id="dl-btn">
-
+            <button class="my-btn dl-btn-off" id="dl-btn"
+            title="Download network view.">
               <i class="fas fa-download"></i>
             </button>
           </div>
 
           <div class="zoom-widget">
-            <div class="zoom-widget-row">
-              <button class="my-btn" id="zoom_in" title="Zoom in">
-                <i class="fas fa-search-plus"></i>
-              </button>
-            </div>
-            <div class="zoom-widget-row">
-              <button class="my-btn" id="zoom_out" title="Zoom out">
-                <i class="fas fa-search-minus"></i>
-              </button>
-            </div>
+              <div class="zoom-widget-row">
+                <button class="my-btn" id="zoom_in" title="Zoom in">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+              </div>
+              <div class="zoom-widget-row">
+                <button class="my-btn" id="zoom_out" title="Zoom out">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+              </div>
           </div>
 
+            <!--
           {% if no_int_prots|length > 0 %}
           <div class="miss-widget">
             No mechanism found for:
@@ -324,48 +365,46 @@
             {% endfor %}
             </ul>
           </div>
-          {% endif %}
+          {% endif %}-->
 
-        </div>
-
-        <div class="modal" id="help-modal">
-          <div class="modal-content">
-            <span style="padding-right: 3px; background-color: #e44445;" class="modal-close" id="help-modal-close">&times;</span>
-            <h4 style="padding: 3px; background-color: #e44445; color: white;">
-              <b>Quick Guide</b>
-            </h4>
-            <ul style="list-style: none;">
-              <li>
-                <i class="fas fa-arrows-alt" style="font-size:x-large;"></i>
-                <b>Move</b> proteins around by clicking and dragging them.
-              </li>
-              <li>
-                <i class="fas fa-search-plus" style="font-size:x-large;"></i>
-                <b>Zoom</b> in and out with your mouse wheel. Quickly zoom to a protein by double-clicking on it.
-              </li>
-              <li>
-                <i class="fas fa-hand-pointer" style="font-size:x-large;"></i>
-                <b>Hover</b> over elements to highlight connected nodes and edges, and to show their labels.
-              </li>
-              <li>
-                <i class="fas fa-comment-alt" style="font-size:x-large;"></i>
-                <b>Click</b> on nodes and edges to display boxes with more information.
-              </li>
-              <li>
-                <i class="fas fa-check-square" style="font-size:x-large;"></i>
-                <b>Toggle</b> on or off the different protein elements and interactions using the toolbox on the left.
-              </li>
-              <li>
-                <i class="fas fa-camera" style="font-size:x-large;"></i>
-                <b>Download</b> as snapshot of the network view at any moment as a PNG or SVG image.
-              </li>
-            </ul>
+          <div class="modal" id="help-modal">
+            <div class="modal-content">
+              <span style="padding-right: 3px; background-color: #e44445;" class="modal-close" id="help-modal-close">&times;</span>
+              <h4 style="padding: 3px; background-color: #e44445; color: white;">
+                <b>Quick Guide</b>
+              </h4>
+              <ul style="list-style: none;">
+                <li>
+                  <i class="fas fa-arrows-alt" style="font-size:x-large;"></i>
+                  <b>Move</b> proteins around by clicking and dragging them.
+                </li>
+                <li>
+                  <i class="fas fa-search-plus" style="font-size:x-large;"></i>
+                  <b>Zoom</b> in and out with your mouse wheel or by using the toolbar buttons.
+                </li>
+                <!--<li>
+                  <i class="fas fa-hand-pointer" style="font-size:x-large;"></i>
+                  <b>Hover</b> over elements to highlight connected nodes and edges, and to show their labels.
+                </li>-->
+                <li>
+                  <i class="fas fa-comment-alt" style="font-size:x-large;"></i>
+                  <b>Click</b> on nodes and edges to display boxes with more information.
+                </li>
+                <li>
+                  <i class="fas fa-check-square" style="font-size:x-large;"></i>
+                  <b>Toggle</b> on or off the different nodes and interactions using the toolbox on the left.
+                </li>
+                <li>
+                  <i class="fas fa-camera" style="font-size:x-large;"></i>
+                  <b>Download</b> as snapshot of the network view at any moment as a JPG or SVG image.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-
       </div>
 
-      <br> -->
+      <br>
       <div class="alert alert-info" id="bookmark-msg">
         Remember! Bookmark this page if you want to access your results later.
         <span id='bookmark-close' style="cursor: pointer;"><!--<strong> (Dismiss)</strong>--></span>
@@ -402,9 +441,6 @@
 
   </div>
 
-  <script>
-
-  </script>
 
 </body>
 </html>
