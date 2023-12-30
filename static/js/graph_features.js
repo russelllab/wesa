@@ -177,10 +177,9 @@ $(document).ready(function(){
 		var name = node.data("id");
 		var comp = node.data("complexes");
 		var nr_comp = node.data("number-of-complexes");
-        var qtip_content = "<span class='tip'>"+name+"<br>\n"+
-                        "\t<b>Number of complexes: </b>"+nr_comp+"<br>\n" +
-                        "\t<b>Complex names: </b>"+comp+"<br>\n" +
-                        "</span>"
+        var qtip_content = "<b>Protein: "+name+"</b><br>\n"+
+                        "<b>Number of complexes: </b>"+nr_comp+"<br>\n" +
+                        "<b>Complex names: </b>"+comp+"<br>\n"
 		node.qtip({
 			content: qtip_content,
 			position: {
@@ -209,13 +208,12 @@ $(document).ready(function(){
 		var Oy = edge.data("Observed: bait = target");
 		var Om = edge.data("Observed matrix");
 
-        var qtip_content = "<span class='tip'>"+source + " -- " + target +"<br>\n"+
-                        "\t<b>WeSA score: </b>"+wesa+"<br>\n" +
-                        "\t<b>SA score: </b>"+sa+"<br>\n" +
-                        "\t<b>Experiments with the first protein as bait: </b>"+Ox+"<br>\n" +
-                        "\t<b>Experiments with the second protein as bait: </b>"+Oy+"<br>\n" +
-                        "\t<b>Experiments where both were in the matrix: </b>"+Om+"<br>\n" +
-                        "</span>"
+        var qtip_content = "<b>Protein Pair: <span style='color: #1f618d;'>" + source + "</span> -- <span style='color: #b9770e'>" + target +"</span></b><br>\n"+
+                        "<span style='float:left; width: 100px; font-weight: bold'>WeSA score: </span>" + wesa + "<br>\n" +
+                        "<span style='float:left; width: 100px; font-weight: bold'>SA score: </span>" + sa + "<br>\n" +
+                        "<span style='float:left; width: 280px; font-weight: normal'>Experiments with the <span style='color: #1f618d;'>first protein</span> as bait: </span>" + Ox + "<br>\n" +
+                        "<span style='float:left; width: 280px; font-weight: normal'>Experiments with the <span style='color: #b9770e'>second protein</span> as bait: </span>" + Oy + "<br>\n" +
+                        "<span style='float:left; width: 280px; font-weight: normal'>Experiments where both were in the matrix: </span>" + Om + "<br>\n"
 		edge.qtip({
 			content: qtip_content,
 			position: {

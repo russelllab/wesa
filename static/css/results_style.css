@@ -1,4 +1,3 @@
-/* * {box-sizing: border-box} */
 
 .collap-section {
   font-family: Nunito,Helvetica,Arial,sans-serif;
@@ -354,103 +353,12 @@ input[type=number] {
   max-width: none !important;
 }
 .qtip a {
-  /*text-decoration: inherit !important;*/
   color: inherit !important;
 }
 span .tip {
+  float: left;
   line-height: 23px;
-}
-.tiphead:hover {
-  opacity: 50%;
-}
-
-span .tipgen {
-  float: left;
-  width: 80px;
-}
-
-span.tipProt {
-  float: left;
-  width: 70px;
-}
-span.tipProt, .prot {
-  color: #17A589;
-}
-
-span.tipPfam {
-  float: left;
-  width: 80px;
-}
-span.tipPfam, .pfam {
-  color: #074987;
-}
-
-span.tipELM {
-  float: left;
-  width: 90px;
-}
-span.tipELM, .ELM {
-  color: #7f7c7b;
-}
-
-span.tipInP {
-  float: left;
   width: 140px;
-}
-span.tipInP, .InP {
-  color: #e44445;
-}
-
-span.tipCos {
-  color: #28446f;
-  float: left;
-  width: 110px;
-}
-span.tipPPI {
-  float: left;
-  width: 130px;
-}
-span.tipPPI, .PPI {
-  color: #17A589;
-}
-
-span.tipDDI {
-  float: left;
-  width: 130px;
-}
-span.tipDDI, .DDI {
-  color: #33a1c2;
-}
-
-span.tipiDDI {
-  float: left;
-  width: 150px;
-}
-span.tipiDDI, .iDDI {
-  color: #d4ac0d;
-}
-
-span.tipELMint {
-  float: left;
-  width: 140px;
-}
-span.tipELMint, .ELMint {
-  color: #884EA0;
-}
-
-span.tipDMI {
-  float: left;
-  width: 140px;
-}
-span.tipDMI, .DMI {
-  color: #e34a92;
-}
-
-span.pos {
-  color: #06b049;
-}
-span.neg {
-  color: #e74c3c;
 }
 
 .qtip table, th, td {
