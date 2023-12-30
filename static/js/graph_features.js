@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
-    /// Modal (Help pop-up)
+
+	// Modal (Help pop-up)
 	var modal = document.getElementById("help-modal");
 	// When the user clicks the button, open the modal
 	$("#help-btn").click(function() {
@@ -10,7 +11,7 @@ $(document).ready(function(){
 	$("#help-modal-close").click(function() {
 		modal.style.display = "none";
 	});
-	// When the user clicks anywhere outside of the modal, close it
+	// When the user clicks anywhere outside the modal, close it
 	window.onclick = function(event) {
 		if (event.target == modal) {
 			modal.style.display = "none";
@@ -48,7 +49,7 @@ $(document).ready(function(){
 		cy.fit( cy.$("node:visible") );
   	});
 
-/// DOWNLOAD BUTTONS
+	/// DOWNLOAD BUTTONS
 	$("#dl-btn").click(function(){
 	if ( this.className == "my-btn dl-btn-off" ) {
 		this.className = "my-btn dl-btn-on";
@@ -88,7 +89,7 @@ $(document).ready(function(){
 		saveAs(blob, "graph.svg");
 	});
 
-/// Toggle buttons
+	/// Toggle buttons
     $("#toggle_red_edges").change(function(){
         var edges = cy.$("edge[color='#F60E0E']");
         var checked = document.getElementById("toggle_red_edges").checked;
@@ -104,11 +105,8 @@ $(document).ready(function(){
         var checked = document.getElementById("filter_nodes").checked;
         if (checked) {
             nodes.style("display", "none");
-            //$("#elm_red_container").show();
         } else {
             nodes.style("display", "element");
-            //$("#elm_red_container").hide();
-            //$("#toggle_red_edges").prop("checked", false);
         }
   	});
 
@@ -221,11 +219,8 @@ $(document).ready(function(){
 		edge.qtip({
 			content: qtip_content,
 			position: {
-				my: "bottom center",
-				at: "bottom center",
-				adjust: {
-                    screen: true
-                }
+				my: "top center",
+				at: "bottom center"
 			},
 			style: {
 				classes: "qtip-bootstrap",
@@ -233,9 +228,9 @@ $(document).ready(function(){
 					width: 20,
 					height: 10
 				}
-			},
-			show: { event: "directtap" }
+			}
+			// show: { event: "directtap" }
 		});
-		this.trigger("directtap");
+		// this.trigger("directtap");
 	});
 });
