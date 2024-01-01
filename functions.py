@@ -1,3 +1,4 @@
+import uuid
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,6 +6,11 @@ from itertools import compress, combinations
 from scipy.stats import chi2, binom
 from sklearn import metrics
 from collections import Counter
+
+
+def generate_job_id():
+    return str(uuid.uuid4())
+
 
 def merge_matr_dicts(dict1, dict2): # merging the dictionaries for the matrix terms
   res = dict(dict1, **dict2)

@@ -1,15 +1,19 @@
-import flask
+import sys
+import os
+import re
+import json
 import pandas as pd
 import numpy as np
-from flask import request
-import functions as f
-import json
-import pickle
-import re
+import pickle5 as pickle
+from flask import request, Flask, render_template
+from dotenv import dotenv_values
 
-path_to_data = 'C:/Users/magda/Work projects/SA/results-after-RECOMB/'
+from wesa_app import app
+from . import functions as f
 
-APP = flask.Flask(__name__)
+HERE_PATH = os.path.dirname(os.path.abspath(__file__))
+config = dotenv_values(dotenv_path=f"{HERE_PATH}/.env")
+path_to_data = config["DATA_PATH"]
 
 columns = [
   {
@@ -49,11 +53,22 @@ columns = [
   }
 ]
 
-@APP.route('/')
+@app.route('/')
+@app.route("/index")
 def index():
-    return flask.render_template('index.html')
+    return render_template('index.html')
 
-@APP.route('/output', methods = ["POST","GET"])
+@app.route("/help")
+def help():
+        return render_template('help.html')
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    job_id = f.generate_job_id()
+    # Process the data and queue the job with job_id
+    return redirect(url_for('results', job_id=job_id))
+
+@app.route('/output', methods = ["POST","GET"])
 def output():
     if request.method == "POST":
         input1 = request.form["prots_input"]
@@ -63,15 +78,21 @@ def output():
             input = input1
         else:
             input = input2.read().decode("utf-8")
+        #def remove_non_printable(input_str):
+        #    return re.sub(r'[^\x20-\x7E]', '', input_str)
         ### IDENTIFY BACKGROUND DATA
         bg_name = request.form['DataSource']
-        bg = pd.read_csv('C:/Users/magda/Work projects/webtool_v2/static/data/'+bg_name+'.txt', sep = '\t')
+        bg = pd.read_csv(path_to_data + bg_name + '.txt', sep = '\t')
+        print('Background file:', path_to_data + bg_name + '.txt')
         with open(path_to_data + 'article_mydict_matrix_' + bg_name + '.pkl', 'rb') as file:
             mydict_bg = pickle.load(file)
         with open(path_to_data + 'article_matr_list_' + bg_name + '.pkl', 'rb') as file:
             matr_list_bg = pickle.load(file)
 
+        ### THRESHOLDS FOR THE DATASETS
         db_vector = ['biogrid', 'bioplex', 'intact', 'intact_bioGrid', 'intact_bioPlex', 'bioGrid_bioPlex', 'all']
+        #threshold_vector = [18.78, 31.82, 11.43, 73.86, 24.73, 51.08, 21.94]
+        #db_threshold = threshold_vector[[j for j in range(len(db_vector)) if db_vector[j] == bg_name][0]]
         # new (all lines in this block) + changes in results and graph_features2
         threshold_vector = [24.64, 7.33, 25.57, 31.47, 10.99, 12.7, 14.77] #[18.78, 31.82, 11.43, 73.86, 24.73, 51.08, 21.94]
         fpr1_threshold_vector = [64.66, 45.66, 84.61, 81.74, 94.87, 62.73, 67.53]
@@ -112,36 +133,31 @@ def output():
             A = A[A['interactors'].isin(queried_interactions)].rename(
                 columns={'bait':'protein_x', 'prey':'protein_y', 'tot_pur_x':'tot_pur', 'Lambda_ij': 'WeSA',
                          'a_ij': 'SA','m_ij':'m', 'm_ij_lrs':'m_lrs'})
-            #unknown_interactions = list(queried_interactions[queried_interactions.isin(bg['interactors'].tolist())==False])
-            unknown_interactions = []
-            for i in queried_interactions:
-                #print('As string', str(i), '; Just like that:', i)
-                if any([str(i) in str(j) for j in bg['interactors'].tolist()]):
-                    continue
-                else:
-                    unknown_interactions = unknown_interactions + [str(i)]
+            unknown_interactions = list(queried_interactions[queried_interactions.isin(bg['interactors'].tolist())==False])
+            #unknown_interactions = []
+            #for i in queried_interactions:
+            #    if any(remove_non_printable(str(i)) in remove_non_printable(str(j).strip()) for j in bg['interactors'].tolist()):
+            #        continue
+            #    else:
+            #        unknown_interactions = unknown_interactions + [str(i)]
+            #print(unknown_interactions)
         else: # the case where we just request to see old records for protein of interest
             bg = pd.read_csv(path_to_data+'A_article_'+bg_name+'_'+'unweighted'+'.tsv', sep = '\t')
             A = bg[(bg.bait.isin(list(myinput.iloc[:,0]))) | (bg.prey.isin(list(myinput.iloc[:,0])))].rename(
                 columns={'bait':'protein_x', 'prey':'protein_y', 'tot_pur_x':'tot_pur', 'Lambda_ij': 'WeSA',
                          'a_ij': 'SA','m_ij':'m', 'm_ij_lrs':'m_lrs'})#.drop(columns=['a_ij_not_obs','Lambda_ij_not_obs'])
             unknown_interactions = []
-        A = A.round({'WeSA':1,'SA':1})
         A = A[['protein_x', 'protein_y', 'WeSA', 'SA', 'O_spoke_x', 'O_spoke_y', 'O_matrix', 'interactors']] #
-
+        A = A.round({'WeSA':1,'SA':1})
+        A = A.rename(columns = {'protein_x': 'Protein A', 'protein_y': 'Protein B', 'O_spoke_x': 'Count: A retrieved B', 'O_spoke_y':'Count: B retrieved A', 'O_matrix':'Count:matrix'})
         A = A.sort_values('WeSA').reset_index(drop=True)
 
-        mynodes = list(set((A['protein_x'])).union(set(A['protein_y'])))
-        with open('C:/Users/magda/Work projects/webtool_v2/static/node_info_corum.pkl', 'rb') as file:
+        mynodes = list(set((A['Protein A'])).union(set(A['Protein B'])))
+        with open('/var/www/flask_apps/wesa/wesa_app/static/node_info_corum.pkl', 'rb') as file:
             corum_info = pickle.load(file)
-
-        #nodes_in_corum = [i for i in range(len(mynodes)) if mynodes[i] in corum_info.keys()]
-        #mygraph = [{"group": "nodes", "data": {"id": mynodes[i], "complexes":corum_info[mynodes[i]]['Complexes'],"number-of-complexes": "test"} } for i in nodes_in_corum] + [{"group": "nodes", "data": {"id": mynodes[i], "complexes": "None", "number-of-complexes": 0} } for i in range(len(mynodes)) if i not in nodes_in_corum]
         temp_dict = {}
         A_only_interactions_above_threshold = A.loc[A.iloc[:,2] > db_threshold,:]
-        has_green_neighbours = list(set(A_only_interactions_above_threshold['protein_x']).union(set(A_only_interactions_above_threshold['protein_y'])))
-        print(A_only_interactions_above_threshold[:2])
-        print(has_green_neighbours[:4])
+        has_green_neighbours = list(set(A_only_interactions_above_threshold['Protein A']).union(set(A_only_interactions_above_threshold['Protein B'])))
         node_color = []
         for i in mynodes:
             temp = ['#F60E0E']
@@ -150,25 +166,20 @@ def output():
             node_color = node_color + temp
             if i in corum_info.keys():
                 temp_dict[i] = {'Complexes': corum_info[i]['Complexes'], "number-of-complexes":corum_info[i]['No. complexes']}
-                #print(corum_info[i])
             else:
                 temp_dict[i] = {'Complexes': 'None', 'number-of-complexes': "0"}
         mygraph = [{"group": "nodes", "data":{"id":mynodes[i], "node_color":node_color[i], "number-of-complexes":str(temp_dict[mynodes[i]]['number-of-complexes']), "complexes":str(temp_dict[mynodes[i]]['Complexes'])}} for i in range(len(mynodes))]
 
         nodes_with_solid_connections = set()
-        A = A.sort_values('WeSA').reset_index(drop=True)#.reset_index(names='linewidth')
-        #A = A[[i for i in A.columns if i !='linewidth'] + ['linewidth']]
-        #A['linewidth'] = [np.min([i, 12]) for i in (A['linewidth']+3)*0.1]
+        A = A.sort_values('WeSA').reset_index(drop=True)
         A['linewidth'] = np.logspace(np.log10(0.1), np.log10(6), num = np.shape(A)[0])
-        print('Maximum linewidth = ', max(A['linewidth']))
-        #print('My new experiment:', A[:3])
         for i in range(np.shape(A)[0]):
             if A.iloc[i,2] > db_threshold:
                 temp_color = '#39BF58'
             else:
                 temp_color = '#F60E0E'
 
-            temp_thresholds = [0,0,0,0] # new (this for loop)
+            temp_thresholds = [0,0,0,0]
             for j in range(1,5):
                 if A.iloc[i,2] > db_thresholds[j]:
                     temp_thresholds[j-1] = 'keep'
@@ -177,6 +188,7 @@ def output():
 
             if (A.iloc[i,np.shape(A)[1]-1] in unknown_interactions):
                 temp_linestyle = 'dashed'
+                print('I am in dashed if because:', A.iloc[i,np.shape(A)[1]-1])
             else:
                 temp_linestyle = 'solid'
                 nodes_with_solid_connections = nodes_with_solid_connections.union(set(A.iloc[i,:2]))
@@ -196,7 +208,7 @@ def output():
                     "color": temp_color,
                     "linestyle": temp_linestyle,
                     "linewidth": A.iloc[i,np.shape(A)[1]-1],
-                    "fpr1": temp_thresholds[0], # new (these below)
+                    "fpr1": temp_thresholds[0],
                     "fpr5": temp_thresholds[1],
                     "fpr10": temp_thresholds[2],
                     "fpr20": temp_thresholds[3]
@@ -208,18 +220,20 @@ def output():
                     i['data']['nodeLinestyles'] = 'include_solid'
                 else:
                     i['data']['nodeLinestyles'] = 'only_dashed'
-
-        with open('C:/Users/magda/Work projects/webtool_v2/static/mygraph1.json', 'wt') as file_out:
+        
+        with open('/var/www/flask_apps/wesa/wesa_app/static/mygraph.json', 'wt') as file_out:
             json.dump(mygraph, file_out)
 
-        A = A[['protein_x', 'protein_y', 'WeSA', 'SA', 'O_spoke_x', 'O_spoke_y', 'O_matrix']]  #
+        A = A[['Protein A', 'Protein B', 'WeSA', 'SA', 'Count: A retrieved B', 'Count: B retrieved A', 'Count:matrix']]
         output = json.loads(A.to_json(orient='split'))
-        with open('C:/Users/magda/Work projects/webtool_v2/static/myresults.json', 'wt') as file_out:
+        with open('/var/www/flask_apps/wesa/wesa_app/static/myresults.json', 'wt') as file_out:
             json.dump(output, file_out)
-        data = output["data"]
-        columns = output["columns"]
-    return flask.render_template('results.html', ints_json= "myresults.json", graph_json= "mygraph1.json", data=data, columns=columns, title='Your scored results') #flask.render_template('output.html', out=output)
+       	mydata = output["data"]
+        mycolumns = output["columns"]
+    return render_template('results.html', ints_json= "myresults.json", graph_json="mygraph.json", data=mydata, columns=mycolumns, title='Your scored results')
+
 
 if __name__ == '__main__':
+    APP = Flask(__name__)
     APP.debug = True
     APP.run()
