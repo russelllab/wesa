@@ -36,17 +36,19 @@ var json_style = [
 				        "height": "12px",
 				        "shape": "roundrectangle",
                         "background-opacity": "1",
-                        "background-color": "#D4B9B9",
+                        "background-color": "data(node_color)",
                         "border-width": "0.1px",
-                        "border-color": "data(node_color)",
+                        "border-color": "black",
                         "border-opacity": "1",
                         "label": "data(id)",
+                        "color": "white",
                         "font-size": "5.5px",
                         "font-weight": "bold",
+                        "text-outline-width": "0.3",
+                        "text-outline-color": "data(node_color)",
                         "text-halign": "center",
                         "text-valign": "bottom",
                         "text-margin-y": "-8.5px",
-                        "color": "black",
                         "events": "yes",
                         "text-events": "yes"
                 }
@@ -56,6 +58,7 @@ var json_style = [
                 "style": {
                     "line-color": "data(color)",
                     "line-style": "data(linestyle)",
+                    "opacity": "0.7",
                     "width": "data(linewidth)"
                 }
         }
