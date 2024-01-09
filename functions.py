@@ -12,6 +12,10 @@ def generate_job_id():
     return str(uuid.uuid4())
 
 
+# def remove_non_printable(input_str):
+#    return re.sub(r'[^\x20-\x7E]', '', input_str)
+
+
 def merge_matr_dicts(dict1, dict2): # merging the dictionaries for the matrix terms
   res = dict(dict1, **dict2)
   res.update((k, dict1[k] + dict2[k]) for k in set(dict1).intersection(dict2))
