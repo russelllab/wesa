@@ -21,6 +21,8 @@ node_info_file = f'{HERE_PATH}/static/node_info_corum.pkl'
 output_dir = f'{HERE_PATH}/static/jobs/'
 graph_outfile = 'mygraph.json'
 ints_outfile = 'myresults.json'
+# Templates
+template_input_error = "input_error.html"
 
 # Configure logging
 logging.basicConfig(
@@ -161,7 +163,7 @@ def process_data(input, bg_name, job_dir):
     A = A.sort_values('WeSA').reset_index(drop=True)
 
     mynodes = list(set((A['Protein A'])).union(set(A['Protein B'])))
-    with open('/var/www/flask_apps/wesa/wesa_app/static/node_info_corum.pkl', 'rb') as file:
+    with open(node_info_file, 'rb') as file:
         corum_info = pickle.load(file)
     temp_dict = {}
     A_only_interactions_above_threshold = A.loc[A.iloc[:, 2] > db_threshold, :]
@@ -277,6 +279,9 @@ def submit():
         input = input1
     else:
         input = input2.read().decode("utf-8")
+
+    if not len(input.strip()):
+        return render_template(template_input_error)
 
     # Generate job_id
     job_id = f.generate_job_id()
