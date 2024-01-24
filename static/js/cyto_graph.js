@@ -1,6 +1,7 @@
 "use strict";
 
 var cy;
+var layout;
 
 function initializeCytoscape() {
 
@@ -57,6 +58,12 @@ function initializeCytoscape() {
         });
 
         cy.fit(cy.$("node:visible"));
+
+        layout = cy.layout({
+            name: 'cose',
+            fit: true
+        });
+
     }).fail(function() {
         console.error("Error loading Cytoscape data.");
     });
