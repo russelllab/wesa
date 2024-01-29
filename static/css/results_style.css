@@ -87,7 +87,7 @@
   border-right: 1px solid #ccc;
   padding-bottom: 10px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
 }
 .control-panel legend{
   font-size: 14px;
@@ -371,12 +371,6 @@ input[type=number] {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-
-#lo_slider_container {
-  display: none;
-}
-
-
 
 .qtip {
   max-width: none !important;

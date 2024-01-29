@@ -134,7 +134,8 @@
         <div class="network-container">
             <div class="control-panel">
 
-                <button type="button" class="collap-section collap-active">
+                <button type="button" class="collap-section collap-active"
+                        style="font-size:16px;font-weight:bold;">
                     Customization options
                 </button>
 
@@ -158,45 +159,24 @@
 
                     <label class="container"
                            title="Hide proteins that have no interactions in the current network view.">
-                        Show only connected proteins
+                        <span style="font-size: 14px; font-weight: normal">Show only connected proteins</span>
                         <input type="checkbox" id="hide-unconnected-nodes" checked="checked">
                         <span class="checkmark"></span>
                     </label>
 
                     <label class="container"
                            title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
-                        Hide low-WeSA score interactions (red edges
+                        <span style="font-size: 14px; font-weight: normal">Hide low-WeSA score interactions (red edges)</span>
                         <input type="checkbox" id="toggle_red_edges">
                         <span class="checkmark"></span>
                     </label><br>
+
                     <label class="container"
-                           title="Hide nodes which have no interactions with WeSA scores above the recommended WeSA threshold for the selected background dataset.">
-                        Hide nodes with red links only
-                        <input type="checkbox" id="filter_nodes">
-                        <span class="checkmark"></span>
-                    </label><br>
-                    <!--<div id="elm_red_container" style="float: right;">
-                      <label class="container"
-                      title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
-                        Hide red edges
-                        <input type="checkbox" id="toggle_red_edges">
-                        <span class="checkmark"></span>
-                      </label><br>
-                    </div> -->
-                    <label class="container"
-                           title="Hide interactions which have not been observed previously (in the selected background dataset).">
-                        Hide dashed edges
+                           title="Hide interactions which have not been observed previously in the selected background dataset.">
+                        <span style="font-size: 14px; font-weight: normal">Hide previously unobserved interactions (dashed edges)</span>
                         <input type="checkbox" id="hide_dashed_edges">
                         <span class="checkmark"></span>
                     </label><br>
-
-                    <label class="container"
-                           title="Hide nodes which have no interactions which were observed in previous data.">
-                        Hide previously unobserved nodes
-                        <input type="checkbox" id="filter_nodes_solid">
-                        <span class="checkmark"></span>
-                    </label><br>
-
 
                 </div>
 

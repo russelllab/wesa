@@ -1,8 +1,22 @@
+function changeLayout(){
+    var layoutValue = $("#layout-dropdown").val();
+
+    var visibleElements = cy.elements().filter(function(element) {
+        return element.visible();
+    });
+
+    layout = cy.layout({
+        name: layoutValue,
+        fit: true,
+        eles: visibleElements
+    });
+    layout.run()
+}
+
 function updateGraphBasedOnThreshold(threshold) {
     cy.nodes().style("display", "element");
 
      if (threshold == "None") {
-         cy.edges().style("display", "element");
          if ($("#toggle_red_edges").prop("checked")) {
              var edges = cy.edges('[color!=\'#F60E0E\']');
          } else {
@@ -29,7 +43,7 @@ function updateGraphBasedOnThreshold(threshold) {
      hideUnconnectedNodes();
      var checked = document.getElementById("hide-unconnected-nodes").checked;
      if (checked) {
-         layout.run();
+         changeLayout();
      }
 }
 
@@ -154,12 +168,7 @@ function initializeGraphFeats() {
 
     // Layout dropdown option
     $("#layout-dropdown").change(function () {
-        var layoutValue = this.value;
-        layout = cy.layout({
-            name: layoutValue,
-            fit: true
-        });
-        layout.run()
+        changeLayout();
     });
 
     $('#fpr-threshold-slider').on('input', function () {
@@ -177,7 +186,7 @@ function initializeGraphFeats() {
     /// Toggle buttons
     $('#hide-unconnected-nodes').change(function () {
         hideUnconnectedNodes();
-        layout.run()
+        changeLayout();
     });
 
     $("#toggle_red_edges").change(function () {
@@ -190,12 +199,8 @@ function initializeGraphFeats() {
         if ( $("#toggle_red_edges").prop("checked") ) {
             edges.style("display", "none");
         }
-        // hideRedEdges();
-        // hideUnconnectedNodes();
-        // var checked = document.getElementById("hide-unconnected-nodes").checked;
-        // if (checked) {
-        //     layout.run();
-        // }
+        hideUnconnectedNodes();
+        changeLayout();
     });
 
     $("#filter_nodes").change(function () {
