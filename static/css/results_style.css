@@ -1,4 +1,32 @@
-/* * {box-sizing: border-box} */
+#load-container {
+  grid-area: ct;
+  min-height: 700px;
+  margin: auto;
+  text-align: center;
+}
+#loading_msg {
+  margin: auto;
+  text-align: center;
+}
+.loader {
+  margin: auto;
+  border: 16px solid #FFF;
+  border-radius: 50%;
+  border-top: 16px solid #e44445;
+  border-bottom: 16px solid #e44445;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 .collap-section {
   font-family: Nunito,Helvetica,Arial,sans-serif;
@@ -59,7 +87,7 @@
   border-right: 1px solid #ccc;
   padding-bottom: 10px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
 }
 .control-panel legend{
   font-size: 14px;
@@ -344,113 +372,16 @@ input[type=number] {
     transform: rotate(45deg);
 }
 
-#lo_slider_container {
-  display: none;
-}
-
-
-
 .qtip {
   max-width: none !important;
 }
 .qtip a {
-  /*text-decoration: inherit !important;*/
   color: inherit !important;
 }
 span .tip {
+  float: left;
   line-height: 23px;
-}
-.tiphead:hover {
-  opacity: 50%;
-}
-
-span .tipgen {
-  float: left;
-  width: 80px;
-}
-
-span.tipProt {
-  float: left;
-  width: 70px;
-}
-span.tipProt, .prot {
-  color: #17A589;
-}
-
-span.tipPfam {
-  float: left;
-  width: 80px;
-}
-span.tipPfam, .pfam {
-  color: #074987;
-}
-
-span.tipELM {
-  float: left;
-  width: 90px;
-}
-span.tipELM, .ELM {
-  color: #7f7c7b;
-}
-
-span.tipInP {
-  float: left;
   width: 140px;
-}
-span.tipInP, .InP {
-  color: #e44445;
-}
-
-span.tipCos {
-  color: #28446f;
-  float: left;
-  width: 110px;
-}
-span.tipPPI {
-  float: left;
-  width: 130px;
-}
-span.tipPPI, .PPI {
-  color: #17A589;
-}
-
-span.tipDDI {
-  float: left;
-  width: 130px;
-}
-span.tipDDI, .DDI {
-  color: #33a1c2;
-}
-
-span.tipiDDI {
-  float: left;
-  width: 150px;
-}
-span.tipiDDI, .iDDI {
-  color: #d4ac0d;
-}
-
-span.tipELMint {
-  float: left;
-  width: 140px;
-}
-span.tipELMint, .ELMint {
-  color: #884EA0;
-}
-
-span.tipDMI {
-  float: left;
-  width: 140px;
-}
-span.tipDMI, .DMI {
-  color: #e34a92;
-}
-
-span.pos {
-  color: #06b049;
-}
-span.neg {
-  color: #e74c3c;
 }
 
 .qtip table, th, td {

@@ -1,3 +1,4 @@
+import uuid
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,6 +6,12 @@ from itertools import compress, combinations
 from scipy.stats import chi2, binom
 from sklearn import metrics
 from collections import Counter
+import pickle5 as pickle
+
+
+def generate_job_id():
+    return str(uuid.uuid4())
+
 
 def merge_matr_dicts(dict1, dict2): # merging the dictionaries for the matrix terms
   res = dict(dict1, **dict2)
@@ -263,14 +270,17 @@ def add_to_A(small_s_of_interest, s, new_matr_list):
     return A
 
 
-def create_A_dict_v(data, fn_path_to_A, use_conf=False, fn_matr_dict = {}, fn_matr_list = {}, matrix_available=True,
-                    matr_from_file = False, matr_dict_name='mydict_matrix.pkl', matr_list_name='matr_list.pkl',
-                    save_data = False, with_shrinkage=False, shrink_param=0.5, scale_weight=True):
-    # A is created using a dictionary for the matrix
+def create_A_dict_v(data, fn_path_to_A, fn_matr_dict={}, fn_matr_list={},
+                    matr_dict_name='mydict_matrix.pkl', matr_list_name='matr_list.pkl',
+                    use_conf=False, matrix_available=True, matr_from_file=False,
+                    save_data=False, with_shrinkage=False, shrink_param=0.5, scale_weight=True):
+    """A is created using a dictionary for the matrix
     # if matrix_available, two files should exist with names matr_dict_name and matr_list_name
     # if matrix_available = False, the function creates the matrix from scratch and saves the relevant two files with names:
     # 'fn'+matr_dict_name and 'fn'+matr_list_name
     #starttime = timeit.default_timer()
+    """
+
     s, result0 = compute_spoke_ij_conf_weighted(data, use_conf=use_conf, with_shrinkage=with_shrinkage,
                                                 shrink_param=shrink_param)
     s = remove_self_loops(s, 'bait', 'prey')
@@ -396,6 +406,7 @@ def create_A_dict_v(data, fn_path_to_A, use_conf=False, fn_matr_dict = {}, fn_ma
     #print("Function finished. Total time: ", timeit.default_timer() - starttime)
     return A
 
+
 def create_A_db(A):
     """Generate db."""
     for i in range(np.shape(A)[0]):
@@ -408,6 +419,7 @@ def create_A_db(A):
                     O_matrix=A.O_matrix[i])
         db.session.add(item)
     db.session.commit()
+
 
 def replace_names(file, return_table):
     file = file.replace({'gene': r'\s.*'}, {'gene': ''}, regex=True).drop_duplicates()
@@ -436,6 +448,7 @@ def impute_delete_na_conf(data, delete=True):
         data.loc[data['conf'] == 0, 'conf'] = random.choices(list(data.loc[data['conf'] > 0, 'conf']), k=l)
     return data
 
+
 # Compiling the matrix table from the spokes data
 # Input should contain the columns: bait, prey and identifier
 def compile_matrix_from_spoke(data, bool_self_baited):
@@ -459,27 +472,29 @@ def compile_matrix_from_spoke(data, bool_self_baited):
 
 
 # Functions supporting matrix creation
-def create_prey_id_dict(data):  # data should contain cols 'prey' and 'identifier'
-    # records for each prey, its identifiers {prey:[identifiers]}
+def create_prey_id_dict(data):
+    """Creates prey-identifier dictionary from dataframe
+    input: dataframe containing columns 'prey' and 'identifier'
+    return: dictionary {prey:[identifiers]}
+    """
     mydict = {}
-    step = 0
-    for i in data['prey'].unique():  # len(data['prey'].unique()) = 12,186
-        if step % 2000 == 0:
-            print(step)
-        mydict[i] = [data['identifier'][j] for j in data[data['prey'] == i].index]
-        step += 1
+    df = data[['prey', 'identifier']].drop_duplicates(ignore_index=True)
+    for i in df['prey'].unique():
+        mydict[i] = [df['identifier'][j] for j in df[df['prey'] == i].index]
     return mydict
 
-def create_matr_list(data, prey_id_dict):  # data = s (with bait and prey columns to get the matrix from)
-    # creates a dict {['prot1;prot2']:count} of matrix pairs (which have spoke observations) and their obs. numbers
+
+def create_matr_list(data, prey_id_dict):
+    """Creates a dict {['prot1;prot2']:count} of matrix pairs (which have spoke observations) and their obs. numbers
+    input: data = s (with bait and prey columns to get the matrix from)
+    """
     matr_list = {}
     for i in range(np.shape(data)[0]):
-        if i % 300000 == 0:
-            print(i)
         if data.loc[i, 'bait'] in prey_id_dict:
             matr_list[';'.join(sorted([data.loc[i, 'bait'], data.loc[i, 'prey']], reverse=True))] = len(
                 list(set(prey_id_dict[data.loc[i, 'bait']]).intersection(prey_id_dict[data.loc[i, 'prey']])))
     return matr_list
+
 
 # Plotting histogram of the scores. Lambda is always plotted. There are also the options for plotting double-Lambda & SA
 # as well as curves of the chi-sq. distribution.
@@ -499,6 +514,7 @@ def sa_hist(bool_doubled, mydata, hist_range_min, hist_range_max, bool_chi_lines
                  rwidth=1, label='SA')
     plt.legend(loc='upper right')
     plt.xlim((hist_range_min, hist_range_max))
+
 
 # Input: score_str is 'Lambda_ij' or 'a_ij' (or any other column containing the score of interest)
 #        gs_data contains a column 'interactors' and another (holder) column, which should be called 'ComplexName'

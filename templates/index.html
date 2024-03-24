@@ -124,21 +124,6 @@ TTC26`);
                 type="text/javascript"
                 src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.js"
         ></script>
-        <!-- Matomo -->
-        <script type="text/javascript">
-                var _paq = window._paq = window._paq || [];
-                /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-                _paq.push(['trackPageView']);
-                _paq.push(['enableLinkTracking']);
-                (function() {
-                        var u="https://tr-denbi.embl.de/heimdall/";
-                        _paq.push(['setTrackerUrl', u+'matomo.php']);
-                        _paq.push(['setSiteId', '36']);
-                        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-                })();
-        </script>
-        <!-- End Matomo Code -->
 </head>
 
 <body>
@@ -164,21 +149,19 @@ TTC26`);
                                                         score which can rank results from protein experiments of the bait-prey
                                                         type, e.g. affinity purification, immunoprecipitation or proximity labelling.
                                                 </p>
-                                                <br>
                                                 <p>
                                                         You can enter lists of interacting proteins according to the results
                                                         of your experiment. Input your raw data before any filtering is done.
                                                 </p>
-                                                <br>
                                                 <p>
                                                         As a result you will get a re-ordered list of scores which allows you to
                                                         understand which interactions are more likely than others based on what
                                                         previous experiments can add to your data.
-                                                </p><br>
-                                                <p>
-                                                     <!--   <i class="far fa-file-alt"></i>  <a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8262711/'>
-                                                                Gonzalez-Sanchez et al., 2021 </a><br> -->
                                                 </p>
+                                                <p>
+					                                This website is free and open to all users without login requirement. Source code
+                                                    is freely available at <a href="github.com/Magi-Shtetinska/wesa-working">GitHub</a>.
+                                                </p></br>
                                         </div>
                                         <div class="intro-slideshow">
                                                 <div class="mySlides">
@@ -217,7 +200,7 @@ TTC26`);
                                 </div>
                                 <form
                                 name="myForm"
-                                action="/output"
+                                action="/submit"
                                 method="post"
                                 novalidate="novalidate"
                                 enctype="multipart/form-data"
@@ -425,7 +408,7 @@ TTC26`);
                 function loading() {
                         document.body.scrollTop = 0;
                         document.documentElement.scrollTop = 0;
-                        $(".load-container").show();
+                        //$(".load-container").show();
                         $(".main-container").hide();
                         $(".intro-container").hide();
                 }

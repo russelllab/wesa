@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>WeSA Help</title>
+		<link
+			rel="shortcut icon"
+			type="image/x-icon"
+			href="static/images/favicon.ico.png"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Staatliches|Lato|Audiowide|Source+Sans+Pro:400,600"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+			integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ url_for('static',filename='css/common.css') }}?v=b3bae01ae7edceff2c15cdafaa8df76d"
+		/>
+		<script
+			type="text/javascript"
+			src="{{ url_for('static',filename='js/jquery-3.3.1.js') }}"
+		></script>
+
+		<script
+			type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.js"
+		></script>
+
+		<script>
+			$(document).ready(function(){
+				$("tr:odd").css({
+					"background-color":"#F9F9F9"});
+				});
+		</script>
+
+		<style>
+			.content {
+				font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+			}
+			.main-header {
+				margin-top: 10px;
+			}
+			.sub-header {
+				border-bottom: 1px solid #d6d6d6;
+				padding-bottom: 2px;
+				font-size: large;
+				font-weight: bold;
+				margin-bottom: 5px;
+			}
+			.main-container {
+				width: 950px;
+				margin: auto;
+				background-color: #fff;
+				padding: 20px;
+				border: 1px solid #d6d6d6;
+				border-radius: 4px;
+			}
+			.free {
+				width: auto;
+				padding: 2px;
+				text-align: center;
+				background-color: lightgoldenrodyellow;
+				font-style: italic;
+				font-weight: bold;
+			}
+			table {
+				width: 400px;
+				margin-bottom: 5px;
+			}
+			tr {
+				border-bottom: 1px solid #ddd;
+				padding-right: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="grid-container">
+			{% include "header.html" %}
+
+			<div class="content">
+				<div class="main-container">
+					<div class="main-header">
+						<h3>
+							<i class="fas fa-question-circle"></i
+							><b> Help and documentation</b>
+						</h3>
+					</div>
+
+					<div class="sub-header">What is WeSA?</div>
+                        <p>
+						WeSA, (weighted socioaffinity), is a statistical score which can rank results from protein 
+						experiments of the bait-prey type, e.g. affinity purification, immunoprecipitation or proximity labelling.<br><br>
+						You can enter lists of interacting proteins according to the results of your experiment. 
+						Input your raw data before any filtering is done.<br> <br>
+						As a result you will get a re-ordered list of scores which allows one 
+						to understand which interactions are more likely than others based on what previous experiments can add to your data.
+                        </p>
+
+					<div class="sub-header">Input</div>
+					<p>
+						<strong>WeSA</strong> calculations require protein pair data to
+						compute the scores of interactions. There are two possibilities: calculating the score using user input data or
+						displaying the scores as they are computed from databases. Users can provide their input in
+						different ways but always using <b>gene names</b>.
+						<br /><br />
+						You can input a <b>list of proteins</b> (one protein per line) and
+						it will look for all interactions involving any protein on the list 
+						and display the scores as calculated from the data in the selected database
+						(IntAct, BioGRID, BioPlex or any combination of the three). <br/>
+						If you want to re-calculate the scores while including your own experimental
+						results, then enter a <b>list of protein pairs</b>. In case you are adding results
+						from a single experiment, you can add a simple protein pair list (two proteins in the same line
+						space-separated). Alternatively, for results from multiple experiments,
+						each line should contain a protein pair and the experiment ID in which it was identified.<br />
+						In all cases you should select a database, the data in which most closely resembles your experimental design. 
+						IntAct is selected as default as it has more accurate records than the other two, but it is missing a lot of information
+						which can be found elsewhere. <br><br>
+						Currently, it supports human proteins only.
+					</p>
+
+					<br>
+					<div class="sub-header">Output</div>
+					<p>
+						The output is a table of protein pairs together with their calculated WeSA scores. The table is interactive
+						and the user is encouraged to manually explore
+						their results using the search and sort buttons.
+						<br><br>
+						The resulting table can be exported in several file formats (<b>SVG</b>, <b>Excel</b>,
+						<b>PDF</b>).
+						<br><br>
+						In addition to the overall WeSA score, the output table contains the observed numbers for each protein pair,
+						meaning, the total count of experiments in the data, in which the pair was found 
+						(separately for the three cases: 1. spoke A - when the first protein was bait in the experiment and retrieved the other protein,
+						2. spoke B - when the second protein was bait and retrieved the first, 3. matrix - when the two proteins were captured
+						in an experiment involving another protein distinct from the two proteins of interest.
+					</p><br />
+
+					<div class="sub-header">Submission options explained through examples</div><br>
+					<p class="free">Option 1: Query the existing data</p>
+					<p>
+					<strong>Input:</strong> Single-column list <br>
+						You can input a <i><b>list of proteins</b></i> (one protein per line) and the webtool will output all
+						interactions involving those proteins and their pre-computed WeSA scores. <br><br>
+						<b>Sample input:</b><br>
+						IFT20<br>
+						BBS4<br>
+						LZTFL1<br>
+						<br/>
+						If you do not select a dataset from the dropdown menu, the default is to display interactions
+						discovered and recorded within IntAct (and WeSA scores calculated from IntAct data).</p>
+					<b>Sample output</b><br>
+					<table>
+						<thead>
+							<tr style="border-bottom: 2px" solid #ddd>
+								<th><a href="#colNamesA">Protein A</a></th>
+								<th><a href="#colNamesA">Protein B</a></th>
+								<th><a href="#colNamesW">WeSA</a></th>
+								<th><a href="#colNamesS">SA</a></th>
+								<th><a href="#colNamesC1">Count: A retrieved B</a></th>
+								<th><a href="#colNamesC2">Count: B retrieved A</a></th>
+								<th><a href="#colNamesC3">Count: matrix</a></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>BBS4</td>
+								<td>BBS1</td>
+								<td>71.6</td>
+								<td>16.9</td>
+								<td>5</td>
+								<td>1</td>
+								<td>12</td>
+							</tr>
+							<tr>
+								<td>IFT172</td>
+								<td>IFT20</td>
+								<td>65.8</td>
+								<td>11.5</td>
+								<td>3</td>
+								<td>0</td>
+								<td>14</td>
+							</tr>
+							<tr>
+								<td>BBS4</td>
+								<td>BBS2</td>
+								<td>63.6</td>
+								<td>16</td>
+								<td>3</td>
+								<td>2</td>
+								<td>13</td>
+							</tr>
+							<tr>
+								<td>LZTFL1</td>
+								<td>BBS9</td>
+								<td>46.2</td>
+								<td>0</td>
+								<td>4</td>
+								<td>2</td>
+								<td>0</td>
+							</tr>
+							<tr>
+								<td>IFT88</td>
+								<td>IFT20</td>
+								<td>58.8</td>
+								<td>10.9</td>
+								<td>5</td>
+								<td>0</td>
+								<td>9</td>
+							</tr>
+							<tr>
+								<td colspan="7" style="text-align: center;">...</td>
+							</tr>
+						</tbody>
+					</table>
+					<br/>
+
+					<p class="free">Option 2: Re-calculate the scores to rank the results from your own <i>single</i>
+					experiment</p>
+					<p>If you performed a single experiment (for more than one experiment refer to option 3) and are
+					wondering how to filter the list of your results, you can use this tool to re-calculate the WeSA
+					scores to rank your results. To do this, enter a <i><b>list of protein pairs</b></i> (two proteins in
+					the same line space-separated). <br><br>
+
+						<strong>Input:</strong> Two-column space-separated list <br>
+						The first column in every line should be the tagged bait protein and that should be separated
+						via space from the second protein. In this case, the second column contains all proteins which
+						were identified in the precipitate.
+						<br /><br />
+						<b>Sample input:</b><br>
+						IFT20 IFT72<br>
+						IFT20 IFT81<br>
+						IFT20 IFT74<br>
+						<br/>
+						If you do not select a dataset from the dropdown menu, the default is to use interactions
+						discovered and recorded within IntAct (and WeSA scores calculated from IntAct data enriched with
+						the submitted data).</p>
+					<b>Sample output</b><br>
+					<table>
+						<thead>
+							<tr style="border-bottom: 2px" solid #ddd>
+								<th><a href="#colNamesA">Protein A</a></th>
+								<th><a href="#colNamesA">Protein B</a></th>
+								<th><a href="#colNamesW">WeSA</a></th>
+								<th><a href="#colNamesS">SA</a></th>
+								<th><a href="#colNamesC1">Count: A retrieved B</a></th>
+								<th><a href="#colNamesC2">Count: B retrieved A</a></th>
+								<th><a href="#colNamesC3">Count: matrix</a></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>IFT20</td>
+								<td>IFT72</td>
+								<td>10.6</td>
+								<td>10.6</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+							</tr>
+							<tr>
+								<td>IFT20</td>
+								<td>IFT74</td>
+								<td>8.5</td>
+								<td>8.5</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+							</tr>
+							<tr>
+								<td>IFT20</td>
+								<td>IFT81</td>
+								<td>6.9</td>
+								<td>6.9</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+							</tr>
+						</tbody>
+					</table> <br>
+					<i>Important note:</i> The results only show the scores of the inputted pairs as long as evidence
+					supporting the respective interaction exists in the chosen background dataset used for computations.
+					<br/><br/>
+
+					<p class="free">Option 3: Re-calculate the scores to rank the results from your own	experiments</p>
+					<p>If you performed multiple experiments and are wondering how to filter the list of your results,
+					you can also use this tool to re-calculate the WeSA scores and rank your results.
+					To do this, enter a <i></i><b>list of protein pairs alongside unique experiment identifiers</b></i>.
+						<br><br>
+						<strong>Input:</strong> Three-column space-separated list <br>
+						The first column in every line should be the tagged bait protein and that should be separated
+						via space from the second protein. In this case, the second column contains proteins which
+						were identified in the precipitate of the respective bait. The third entry in every line
+						should be the unique experiment identifier. This identifier can be anything as long as it is
+						unique for every separate experiment.
+						<br /><br />
+						<b>Sample input:</b><br>
+						IFT20 IFT80 E1<br>
+						IFT20 IFT81 E1<br>
+						IFT20 IFT74 E2<br>
+						IFT20 IFT80 E2<br>
+						IFT80 IFT81 E3<br>
+						IFT80 IFT172 E3<br>
+						IFT80 IFT57 E3<br>
+						IFT80 IFT46 E3<br>
+						<br/>
+						If you do not select a dataset from the dropdown menu, the default is to use interactions
+						discovered and recorded within IntAct (and WeSA scores calculated from IntAct data enriched with
+						the submitted data).</p>
+					<b>Sample output</b><br>
+					<table>
+        <thead>
+		<tr style="border-bottom: 2px" solid #ddd>
+                <th><a href="#colNamesA">Protein A</a></th>
+                <th><a href="#colNamesA">Protein B</a></th>
+                <th><a href="#colNamesW">WeSA</a></th>
+                <th><a href="#colNamesS">SA</a></th>
+                <th><a href="#colNamesC1">Count: A retrieved B</a></th>
+                <th><a href="#colNamesC2">Count: B retrieved A</a></th>
+                <th><a href="#colNamesC3">Count: matrix</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>IFT80</td>
+                <td>IFT20</td>
+                <td>64</td>
+                <td>18.8</td>
+                <td>2</td>
+                <td>1</td>
+                <td>14</td>
+            </tr>
+            <tr>
+                <td>IFT20</td>
+                <td>IFT80</td>
+                <td>8.1</td>
+                <td>8.1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT80</td>
+                <td>IFT172</td>
+                <td>8</td>
+                <td>8</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT80</td>
+                <td>IFT46</td>
+                <td>7.9</td>
+                <td>7.9</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT80</td>
+                <td>IFT57</td>
+                <td>7.9</td>
+                <td>7.9</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT20</td>
+                <td>IFT81</td>
+                <td>7.6</td>
+                <td>7.6</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT20</td>
+                <td>IFT74</td>
+                <td>7.4</td>
+                <td>7.4</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>IFT80</td>
+                <td>IFT81</td>
+                <td>7.3</td>
+                <td>7.3</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </tbody><br>
+					</table> <br>
+					<i>Important note:</i> The results only show the scores of the inputted pairs as long as evidence
+					supporting the respective interaction exists in the chosen background dataset used for
+					computations.<br><br/>
+
+					<div class="sub-header" id="colNames">Output table columns</div><br />
+					<p id="colNamesA"><b>Protein A, Protein B:</b> Two proteins which have some evidence supporting
+						their interaction;</p>
+					<p id="colNamesW"><b>WeSA:</b> WeSA score for the respective protein pair, computed from the
+						selected dataset: IntAct, BioGRID, BioPlex or a combination. Higher WeSA scores correspond to
+						interactions which are better supported by the evidence. The visualisation distinguishes red
+						and green interactions: the red	interactions have scores below an optimal threshold which is
+						specific, unique and pre-computed for each dataset based on the optimal balance between true
+						positives and false positives; the green edges correspond to WeSA scores above the optimal
+						threshold.;	</p>
+					<p id="colNamesS"><b>SA:</b> Socioaffinity score for the respective protein pair;</p>
+					<p id="colNamesC1"><b>Count: A retrieved B:</b> Count of recorded experiments in which protein A
+						was the tagged bait protein and	protein B was retrieved;</p>
+					<p id="colNamesC2"><b>Count: B retrieved A:</b> (Reverse situation in comparison to previous) Count
+						of recorded experiments in which protein B was the tagged bait protein and protein A was
+						retrieved;</p>
+					<p id="colNamesC3"><b>Count: matrix:</b> Count of recorded experiments in which some protein X was the tagged bait protein and
+						proteins A and B were retrieved simultaneously (in the same experiment).
+						</p><br />
+<!--
+					<div class="main-header">
+						<h3><i class="far fa-chart-bar"></i><b> Data</b></h3>
+					</div>
+
+					<br />
+					<p>
+						It also runs
+						<a
+							href="https://http://www.russelllab.org/cgi-bin/tools/interprets.pl"
+							>InterPreTS</a
+						>, our tool to predict interactions through tertiary structure.
+					</p>
+					<p>Currently, it supports human and 6 other model organisms.</p> -->
+				</div> 
+			</div>
+
+			{% include "footer.html" %}
+		</div>
+	</body>
+</html>
