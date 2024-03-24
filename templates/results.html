@@ -99,6 +99,9 @@
                         initializeCytoscape();
                         initializeTable();
                         initializeGraphFeats();
+                    } else if (data.state === "FAILURE") {
+                        document.getElementById('loading_msg').innerText = 'Job failed: '+data.state+'. Please, report this problem';
+                        document.getElementById('bookmark_msg').style.display = 'none';
                     } else {
                         document.getElementById('loading_msg').innerText = 'Your job is running...';
                     }
@@ -120,7 +123,7 @@
 
     <div id="load-container">
         <span id="loading_msg">Your job is pending...</span><br>
-        <span>You can bookmark this page and check later</span>
+        <span id="bookmark_msg">You can bookmark this page and check later</span>
         <div class="loader"></div>
     </div>
 
