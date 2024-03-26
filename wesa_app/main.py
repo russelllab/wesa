@@ -32,7 +32,7 @@ template = {
 
 # Configure logging
 logging.basicConfig(
-    filename=f'{HERE_PATH}/log.txt',
+    filename=f'{HERE_PATH}/wesa.log',
     filemode="a",
     level=logging.INFO,
     format="[%(process)d] %(asctime)s - [%(levelname)s] %(message)s",
@@ -111,7 +111,6 @@ def process_data(job_input, bg_name, job_dir):
     # Identify background data
     df_bg = pd.read_csv(path_to_data + bg_name + '.txt', sep='\t')
     logging.info('Background file: %s', path_to_data + bg_name + '.txt')
-    print('Background file:', path_to_data + bg_name + '.txt')
     with open(path_to_data + 'article_mydict_matrix_' + bg_name + '.pkl', 'rb') as file:
         mydict_bg = pickle.load(file)
     with open(path_to_data + 'article_matr_list_' + bg_name + '.pkl', 'rb') as file:

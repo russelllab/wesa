@@ -1,4 +1,4 @@
-<img src="static/images/header.png" height="100">
+<img src="wesa_app/static/images/header.png" height="100">
 
 Tool for improving affinity proteomics data.
 
@@ -11,7 +11,7 @@ WeSA is freely available and open to all users without login requirement at [wes
 Results are presented in an interactive network that allows the user to filter out the low ranked interactions, 
 as well as in a table that contains all interacting protein pairs together with their WeSA score and which can be downloaded for further analysis.
 
-<img src="static/images/wesa_example.png">
+<img src="wesa_app/static/images/wesa_example.png">
 
 ## Evaluation
 ROC analysis (using CORUM-PDB positives and Negatome negatives) shows that WeSA improves 
@@ -21,7 +21,6 @@ Precision = 0.98).
 
 
 ## Setup & Configuration
-WeSA is provided as a Flask app.
 
 ### Requirements
 WeSA requires Python3.6 or higher. We recommend using a virtual environment to install the required packages, e.g.:
@@ -33,4 +32,13 @@ pip install -r wesa/requirements.txt
 ### Data
 All data files required for WeSA can be downloaded at [russelllab.org/wesa/data/](russelllab.org/wesa/data/).
 
-Edit `.env` file to point to the data files. 
+Edit `wesa_app/.env` file to point to the correct data files location. 
+
+
+## Use
+WeSA is provided as a Flask app that allows the same functionalities as our online version.
+
+In addition, WeSA can be run via command line interface, directly generating the network and table output files.
+```shell
+python run.py -i <input_file> -d <database> -o <output_dir>
+```
