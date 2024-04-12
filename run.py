@@ -43,6 +43,6 @@ if __name__ == "__main__":
             sys.exit()
     print(f"Output will be saved to: {args.output}")
 
-    process_data(job_input, args.database, args.output)
+    process_data(query=job_input, database=args.database, job_dir=args.output, job_id="WESA CLI")
 
     print("WeSA CLI finished")

@@ -83,12 +83,13 @@
             async=""></script>
     <script type="text/javascript">
         let statusInterval = setInterval(updateStatus, 2000); // Update every 2 seconds
+        let jobId = "{{ job_id }}"; // Passed from Flask
         let taskId = "{{ task_id }}";  // Passed from Flask
         let graph_json = "{{ url_for('static', filename=graph_json)}}";
         let ints_json = "{{ url_for('static', filename=ints_json)}}";
 
         function updateStatus() {
-            fetch(`/status/${taskId}`)
+            fetch(`/status/${jobId}_${taskId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.state === 'Completed') {
@@ -100,8 +101,12 @@
                         initializeTable();
                         initializeGraphFeats();
                     } else if (data.state === "FAILURE") {
-                        document.getElementById('loading_msg').innerText = 'Job failed: '+data.state+'. Please, report this problem';
+                        document.getElementById('loading_msg').innerHTML =
+                            'Job failed: '+data.state+
+                            '<br><br>Please, report this problem together with the job ID:<br><b>'+
+                            jobId+'</b>';
                         document.getElementById('bookmark_msg').style.display = 'none';
+                        document.getElementById('loading-animation').style.display = 'none';
                     } else {
                         document.getElementById('loading_msg').innerText = 'Your job is running...';
                     }
@@ -124,7 +129,7 @@
     <div id="load-container">
         <span id="loading_msg">Your job is pending...</span><br>
         <span id="bookmark_msg">You can bookmark this page and check later</span>
-        <div class="loader"></div>
+        <div id="loading-animation" class="loader"></div>
     </div>
 
     <div class="content" id="results" style="display:none;">
