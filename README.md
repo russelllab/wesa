@@ -30,7 +30,7 @@ pip install -r wesa/requirements.txt
 ```
 
 ### Data
-All data files required for WeSA can be downloaded at [russelllab.org/wesa/data/](russelllab.org/wesa/data/).
+All data files required for WeSA can be downloaded at [http://russelllab.org/wesa/data/](http://russelllab.org/wesa/data/).
 
 Edit `wesa_app/.env` file to point to the correct data files location. 
 
