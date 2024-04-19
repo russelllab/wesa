@@ -4,50 +4,28 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeSA Results</title>
-    <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="../static/images/favicon.ico.png"
-    />
     <base target="_blank">
-    <!--
-    Loading Icon
-  <script type="text/javascript" charset="utf8" src="https://raw.github.com/HubSpot/pace/v0.5.3/pace.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/pace_atom.css') }}">
-  -->
 
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Allerta+Stencil|Staatliches|Roboto:400|Nunito:wght@300;400;700|Audiowide|Lato">
-    <link rel="stylesheet" type="text/css"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allerta+Stencil|Staatliches|Roboto:400|Nunito:wght@300;400;700|Audiowide|Lato">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"/>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquery.dataTables.css') }}"/> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static',filename='css/common.css') }}?v=b3bae01ae7edceff2c15cdafaa8df76d"/>
-    <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static',filename='css/results_style.css') }}?v=682dd619a5fdbdfa15db6a458d28dbd2"/>
-
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/common.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/results_style.css') }}"/>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"
-            integrity="sha256-yvhiWj8VRHJV4JL+RmFcz3U2E2tu0bdjJ175tlvhSnE=" crossorigin="anonymous"></script>
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.1/cytoscape.min.js"></script> -->
-    <script type="text/javascript"
-            src="https://cdn.rawgit.com/cytoscape/cytoscape.js-qtip/2.7.1/cytoscape-qtip.js"></script>
+{#    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"#}
+{#            integrity="sha256-yvhiWj8VRHJV4JL+RmFcz3U2E2tu0bdjJ175tlvhSnE=" crossorigin="anonymous"></script>#}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.1/cytoscape.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/cytoscape/cytoscape.js-qtip/2.7.1/cytoscape-qtip.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"
             integrity="sha256-FPJJt8nA+xL4RU6/gsriA8p8xAeLGatoyTjldvQKGdE=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js"
@@ -55,16 +33,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.57/pdfmake.min.js"
             integrity="sha256-8s2O+N1IIFZ/3uLADkpz++emTlVbAiI320n5vcyww8M=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.57/vfs_fonts.js"></script>
-    <script defer src="https://friconix.com/cdn/friconix.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js "></script>
-
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js "></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
@@ -76,48 +49,10 @@
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
-    <script type="text/javascript"
-            src="{{ url_for('static',filename='js/cyto_graph.js') }}?v=3a6d41c782599fa0d45b06c29b75f4b6"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/cytoscape-svg.js') }}"></script>
-    <script type="text/javascript" src="/static/js/interaction_table.js?v=61f545ab8292486a44323689c35d5362"
-            async=""></script>
-    <script type="text/javascript">
-        let statusInterval = setInterval(updateStatus, 2000); // Update every 2 seconds
-        let jobId = "{{ job_id }}"; // Passed from Flask
-        let taskId = "{{ task_id }}";  // Passed from Flask
-        let graph_json = "{{ url_for('static', filename=graph_json)}}";
-        let ints_json = "{{ url_for('static', filename=ints_json)}}";
+    <script type="text/javascript" src="{{ url_for('static',filename='js/interaction_table.js') }}" async></script>
 
-        function updateStatus() {
-            fetch(`/status/${jobId}_${taskId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.state === 'Completed') {
-                        clearInterval(statusInterval); // Stop polling
-                        document.getElementById('loading_msg').innerText = 'Your results are ready!';
-                        document.getElementById('load-container').style.display = 'none';
-                        document.getElementById('results').style.display = 'block';
-                        initializeCytoscape();
-                        initializeTable();
-                        initializeGraphFeats();
-                    } else if (data.state === "FAILURE") {
-                        document.getElementById('loading_msg').innerHTML =
-                            'Job failed: '+data.state+
-                            '<br><br>Please, report this problem together with the job ID:<br><b>'+
-                            jobId+'</b>';
-                        document.getElementById('bookmark_msg').style.display = 'none';
-                        document.getElementById('loading-animation').style.display = 'none';
-                    } else {
-                        document.getElementById('loading_msg').innerText = 'Your job is running...';
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
-    <script type="text/javascript"
-            src="{{ url_for('static',filename='js/graph_features.js') }}?v=3a6d41c782599fa0d45b06c29b75f4b6"></script>
-
-
+    <script type="text/javascript" src="{{ url_for('static',filename='js/graph_features.js') }}"></script>
 </head>
 
 <body>
@@ -139,180 +74,286 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="network-container">
-            <div class="control-panel">
 
-                <button type="button" class="collap-section collap-active"
-                        style="font-size:16px;font-weight:bold;">
-                    Customization options
-                </button>
+        <div id="summary" style="display: none;">
+            <h3>Summary</h3>
+               <span id="nr_pairs"></span>
+        </div>
 
-                <div class="collap-content" style="display: block;">
-                    <label for="layout-dropdown">Choose a layout:</label>
-                    <select id="layout-dropdown">
-                        <option value="cose">CoSE</option>
-                        <option value="grid">Grid</option>
-                        <option value="random">Random</option>
-                        <option value="circle">Circle</option>
-                        <option value="concentric">Concentric</option>
-                        <option value="breadthfirst">Breadthfirst</option>
-                    </select>
+        <div class="tab">
+          <button class="tablinks" onclick="openTab(event, 'Network')" id="defaultOpen">
+              <i class="fa-solid fa-circle-nodes"></i> Network View
+          </button>
+          <button class="tablinks" onclick="openTab(event, 'WeSA')">
+              <i class="fas fa-list"></i> WeSA Scores
+          </button>
+        </div>
 
-                    <label for="fpr-threshold-slider"
-                           title="Hide edges with score below the selected FPR threshold (for the selected dataset).">
-                        FPR Threshold:
-                        <span id="fpr-threshold-value">None</span>
-                        <input type="range" id="fpr-threshold-slider" min="1" max="5" step="1" value="1">
-                    </label>
+        <div id="Network" class="tabcontent">
+            <div class="network-container">
+                <div class="control-panel">
 
-                    <label class="container"
-                           title="Hide proteins that have no interactions in the current network view.">
-                        <span style="font-size: 14px; font-weight: normal">Show only connected proteins</span>
-                        <input type="checkbox" id="hide-unconnected-nodes" checked="checked">
-                        <span class="checkmark"></span>
-                    </label>
+                    <div class="collap-section">
+                        Customization Options
+                    </div>
 
-                    <label class="container"
-                           title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
-                        <span style="font-size: 14px; font-weight: normal">Hide low-WeSA score interactions (red edges)</span>
-                        <input type="checkbox" id="toggle_red_edges">
-                        <span class="checkmark"></span>
-                    </label><br>
+                    <div class="collap-content" style="display: block;">
+                        <label for="layout-dropdown">Choose a layout:</label>
+                        <select id="layout-dropdown">
+                            <option value="cose">CoSE</option>
+                            <option value="grid">Grid</option>
+                            <option value="random">Random</option>
+                            <option value="circle">Circle</option>
+                            <option value="concentric">Concentric</option>
+                            <option value="breadthfirst">Breadthfirst</option>
+                        </select>
 
-                    <label class="container"
-                           title="Hide interactions which have not been observed previously in the selected background dataset.">
-                        <span style="font-size: 14px; font-weight: normal">Hide previously unobserved interactions (dashed edges)</span>
-                        <input type="checkbox" id="hide_dashed_edges">
-                        <span class="checkmark"></span>
-                    </label><br>
+                        <label for="fpr-threshold-slider"
+                               title="Hide edges with score below the selected FPR threshold (for the selected dataset).">
+                            FPR Threshold:
+                            <span id="fpr-threshold-value">None</span>
+                            <input type="range" id="fpr-threshold-slider" min="1" max="5" step="1" value="1">
+                        </label>
+
+                        <label class="container"
+                               title="Hide proteins that have no interactions in the current network view.">
+                            <span style="font-size: 14px; font-weight: normal">Show only connected proteins</span>
+                            <input type="checkbox" id="hide-unconnected-nodes" checked="checked">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container"
+                               title="Hide interactions which have WeSA scores below the recommended WeSA threshold for the selected background dataset.">
+                            <span style="font-size: 14px; font-weight: normal">Hide low-WeSA score interactions (red edges)</span>
+                            <input type="checkbox" id="toggle_red_edges">
+                            <span class="checkmark"></span>
+                        </label><br>
+
+                        <label class="container"
+                               title="Hide interactions which have not been observed previously in the selected background dataset.">
+                            <span style="font-size: 14px; font-weight: normal">Hide previously unobserved interactions (dashed edges)</span>
+                            <input type="checkbox" id="hide_dashed_edges">
+                            <span class="checkmark"></span>
+                        </label><br>
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <div class="network">
-                <!-- Cytoscape.js container -->
-                <!--Only the first line is needed to generate the network-->
-                <div class="cytoscape_container" id="cy"></div>
-                <div class="tools-widget">
-                    <button class="my-btn" id="help-btn" title="Help">
-                        <i class="far fa-question-circle"></i>
-                    </button>
-                    <button class="my-btn" id="center" title="Center graph">
-                        <i class="fa fa-align-center"></i>
-                    </button>
-                    <button class="my-btn" id="lock" title="Lock/unlock element positions">
-                        <i class="fa fa-unlock"></i>
-                    </button>
-                </div>
-
-                <div class="dl-widget">
-                    <div id="dl-content">
-                        <!--<button class="dl-btn-pic" id="dl_svg"
-                        title="Download complete network as a vector graphic">
-                          <i class="fas fa-file-download"></i> SVG
-                        </button> -->
-                        <button class="dl-btn-pic" id="dl_jpg"
-                                title="Take a snapshot of the current network view as JPG.">
-                            <i class="fas fa-camera"></i> JPG
+                <div class="network">
+                    <!-- Cytoscape.js container -->
+                    <!--Only the first line is needed to generate the network-->
+                    <div class="cytoscape_container" id="cy"></div>
+                    <div class="tools-widget">
+                        <button class="my-btn" id="help-btn" title="Help">
+                            <i class="far fa-question-circle"></i>
                         </button>
-                        <button class="dl-btn-pic" id="dl_png"
-                                title="Take a snapshot of the current network view as PNG.">
-                            <i class="fas fa-camera"></i> PNG
+                        <button class="my-btn" id="center" title="Center graph">
+                            <i class="fa fa-align-center"></i>
+                        </button>
+                        <button class="my-btn" id="lock" title="Lock/unlock element positions">
+                            <i class="fa fa-unlock"></i>
                         </button>
                     </div>
-                    <button class="my-btn dl-btn-off" id="dl-btn"
-                            title="Download network view.">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
 
-                <div class="zoom-widget">
-                    <div class="zoom-widget-row">
-                        <button class="my-btn" id="zoom_in" title="Zoom in">
-                            <i class="fas fa-search-plus"></i>
+                    <div class="dl-widget">
+                        <div id="dl-content">
+                            <button class="dl-btn-pic" id="dl_svg"
+                            title="Download complete network as a vector graphic">
+                              <i class="fas fa-file-download"></i> SVG
+                            </button>
+                            <button class="dl-btn-pic" id="dl_jpg"
+                            title="Take a snapshot of the current network view as JPG.">
+                                <i class="fas fa-camera"></i> JPG
+                            </button>
+                            <button class="dl-btn-pic" id="dl_png"
+                            title="Take a snapshot of the current network view as PNG.">
+                                <i class="fas fa-camera"></i> PNG
+                            </button>
+                        </div>
+                        <button class="my-btn dl-btn-off" id="dl-btn"
+                                title="Download network view.">
+                            <i class="fas fa-download"></i>
                         </button>
                     </div>
-                    <div class="zoom-widget-row">
-                        <button class="my-btn" id="zoom_out" title="Zoom out">
-                            <i class="fas fa-search-minus"></i>
-                        </button>
-                    </div>
-                </div>
 
-                <div class="modal" id="help-modal">
-                    <div class="modal-content">
-                        <span style="padding-right: 3px; background-color: #e44445;" class="modal-close"
-                              id="help-modal-close">&times;</span>
-                        <h4 style="padding: 3px; background-color: #e44445; color: white;">
-                            <b>Quick Guide</b>
-                        </h4>
-                        <ul style="list-style: none;">
-                            <li>
-                                <i class="fas fa-arrows-alt" style="font-size:x-large;"></i>
-                                <b>Move</b> proteins around by clicking and dragging them.
-                            </li>
-                            <li>
-                                <i class="fas fa-search-plus" style="font-size:x-large;"></i>
-                                <b>Zoom</b> in and out with your mouse wheel or by using the toolbar buttons.
-                            </li>
-                            <!--<li>
-                              <i class="fas fa-hand-pointer" style="font-size:x-large;"></i>
-                              <b>Hover</b> over elements to highlight connected nodes and edges, and to show their labels.
-                            </li>-->
-                            <li>
-                                <i class="fas fa-comment-alt" style="font-size:x-large;"></i>
-                                <b>Click</b> on nodes and edges to display boxes with more information.
-                            </li>
-                            <li>
-                                <i class="fas fa-check-square" style="font-size:x-large;"></i>
-                                <b>Toggle</b> on or off the different nodes and interactions using the toolbox on the
-                                left.
-                            </li>
-                            <li>
-                                <i class="fas fa-camera" style="font-size:x-large;"></i>
-                                <b>Download</b> as snapshot of the network view at any moment as a JPG or SVG image.
-                            </li>
-                        </ul>
+                    <div class="zoom-widget">
+                        <div class="zoom-widget-row">
+                            <button class="my-btn" id="zoom_in" title="Zoom in">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                        <div class="zoom-widget-row">
+                            <button class="my-btn" id="zoom_out" title="Zoom out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal" id="help-modal">
+                        <div class="modal-content">
+                            <span style="padding-right: 3px; background-color: #e44445;" class="modal-close"
+                                  id="help-modal-close">&times;</span>
+                            <h4 style="padding: 3px; background-color: #e44445; color: white;">
+                                <b>Quick Guide</b>
+                            </h4>
+                            <ul style="list-style: none;">
+                                <li>
+                                    <i class="fas fa-arrows-alt" style="font-size:x-large;"></i>
+                                    <b>Move</b> proteins around by clicking and dragging them.
+                                </li>
+                                <li>
+                                    <i class="fas fa-search-plus" style="font-size:x-large;"></i>
+                                    <b>Zoom</b> in and out with your mouse wheel or by using the toolbar buttons.
+                                </li>
+                                <!--<li>
+                                  <i class="fas fa-hand-pointer" style="font-size:x-large;"></i>
+                                  <b>Hover</b> over elements to highlight connected nodes and edges, and to show their labels.
+                                </li>-->
+                                <li>
+                                    <i class="fas fa-comment-alt" style="font-size:x-large;"></i>
+                                    <b>Click</b> on nodes and edges to display boxes with more information.
+                                </li>
+                                <li>
+                                    <i class="fas fa-check-square" style="font-size:x-large;"></i>
+                                    <b>Toggle</b> on or off the different nodes and interactions using the toolbox on the
+                                    left.
+                                </li>
+                                <li>
+                                    <i class="fas fa-camera" style="font-size:x-large;"></i>
+                                    <b>Download</b> as snapshot of the network view at any moment as a JPG or SVG image.
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="section-header"><i class="fas fa-list"></i> WeSA Scores</div>
-        <div class="interaction-table-container">
-            <table id="interaction-table" class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    {% if columns|length > 0 %}
-                        {% for col in columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    {% endif %}
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                    {% if columns|length > 0 %}
-                        {% for col in columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    {% endif %}
-                </tr>
-                </tfoot>
-            </table>
-        </div>
+        <div id="WeSA" class="tabcontent">
+            <div class="interaction-table-container">
+                <table id="interaction-table" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        {% if columns|length > 0 %}
+                            {% for col in columns %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        {% if columns|length > 0 %}
+                            {% for col in columns %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-        <button id="goToTop"><i class="fas fa-level-up-alt"></i></button>
+            <button id="goToTop"><i class="fas fa-level-up-alt"></i></button>
+        </div>
     </div>
+
     {% include "footer.html" %}
 </div>
 
+<script type="text/javascript" src="{{ url_for('static',filename='js/cyto_graph.js') }}"></script>
+<script type="text/javascript">
+    let statusInterval = setInterval(updateStatus, 2000); // Update every 2 seconds
+    let jobId = "{{ job_id }}"; // Passed from Flask
+    let taskId = "{{ task_id }}";  // Passed from Flask
+    let graph_json = "{{ url_for('static', filename=graph_json)}}";
+    let ints_json = "{{ url_for('static', filename=ints_json)}}";
+
+    function updateStatus() {
+        fetch(`/status/${jobId}_${taskId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.state === 'Completed') {
+                    clearInterval(statusInterval); // Stop polling
+                    document.getElementById('loading_msg').innerText = 'Your results are ready!';
+                    retrieve_parameters();
+                    document.getElementById('load-container').style.display = 'none';
+                    document.getElementById('results').style.display = 'block';
+                    initializeCytoscape();
+                    initializeTable();
+                    initializeGraphFeats();
+                } else if (data.state === "FAILURE") {
+                    document.getElementById('loading_msg').innerHTML =
+                        'Job failed: '+data.state+
+                        '<br><br>Please, report this problem together with the job ID:<br><b>'+
+                        jobId+'</b>';
+                    document.getElementById('bookmark_msg').style.display = 'none';
+                    document.getElementById('loading-animation').style.display = 'none';
+                } else {
+                    document.getElementById('loading_msg').innerText = 'Your job is running...';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function retrieve_parameters() {
+        fetch(`/params/${jobId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error('Failed to fetch parameters:', data.error);
+                    document.getElementById('summary').textContent = 'Failed to load parameters.';
+                } else {
+                    // Dynamically filling the HTML with the parameters.
+                    // Ensure the parameter names match those returned by your Flask app.
+                    document.getElementById('db').textContent = data.databases || 'Not specified';
+                    document.getElementById('nr_pairs').textContent = data.nr_pairs || 'Not specified';
+                    document.getElementById('nr_proteins').textContent = data.nr_proteins || 'Not specified';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching the parameters:', error);
+                document.getElementById('summary').textContent = 'Failed to load parameters.';
+            });
+    }
+</script>
 <script>
     function closeAlert() {
         document.getElementById('bookmark-alert').style.display = 'none';
         cy.resize();
     }
+
+    function openTab(evt, tabName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("defaultOpen").click();
+    });
+
 </script>
 
 </body>

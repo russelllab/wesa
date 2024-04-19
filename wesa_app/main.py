@@ -3,10 +3,11 @@ import os
 import re
 import json
 import logging
+import time
 import pandas as pd
 import numpy as np
 import pickle5 as pickle
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify, make_response, session
 from celery import Celery
 from dotenv import dotenv_values
 
@@ -22,6 +23,7 @@ node_info_file = f'{path_to_data}/node_info_corum.pkl'
 output_dir = f'{HERE_PATH}/static/jobs/'
 graph_outfile = 'mygraph.json'
 ints_outfile = 'myresults.json'
+summary_outfile = "summary.txt"
 template = {
     "index": "index.html",
     "results": "results.html",
@@ -29,6 +31,7 @@ template = {
     "input_error": "input_error.html",
     "internal_error": "internal_error.html"
 }
+
 
 # Configure logging
 logging.basicConfig(
@@ -80,10 +83,20 @@ columns = [
 ]
 mycolumns = ['Protein A', 'Protein B', 'WeSA', 'SA', 'Count: A retrieved B', 'Count: B retrieved A', 'Count:matrix']
 
+databases = {
+    "intact": "IntAct",
+    "biogrid": "BioGRID",
+    "bioplex": "BioPlex",
+    "intact_bioGrid": "BioGRID + IntAct",
+    "intact_bioPlex": "BioPlex + IntAct",
+    "bioGrid_bioPlex": "BioPlex + BioGRID",
+    "all": "BioPlex + BioGRID + Intact"
+}
 
-def make_celery(this_app):
-    celery = Celery(this_app.import_name, broker=this_app.config['broker_url'])
-    celery.conf.update(this_app.config)
+
+def make_celery(app):
+    celery = Celery(app.import_name, broker=app.config['broker_url'])
+    celery.conf.update(app.config)
     celery.conf.update(worker_hijack_root_logger=False)
     return celery
 
@@ -170,10 +183,12 @@ def process_data(query, database, job_dir, job_id):
 
     if np.shape(df_input)[1] > 1:
         input_proteins = list(set(df_input['bait']).union(set(df_input['prey'])))
+        nr_pairs = str(len(input_list))
+        nr_proteins = str(len(input_proteins))
         logging.info("%s Input contains: %s protein pairs & %s unique proteins",
                      job_id,
-                     str(len(input_list)),
-                     str(len(input_proteins)))
+                     nr_pairs,
+                     nr_proteins)
         if np.shape(df_input)[1] == 2:
             df_input['identifier'] = 'new'
         queried_interactions = df_input.apply(
@@ -209,6 +224,8 @@ def process_data(query, database, job_dir, job_id):
 
     else:  # the case where we just request to see old records for protein of interest
         input_proteins = list(set(df_input["bait"]))
+        nr_pairs = "none"
+        nr_proteins = str(len(input_proteins))
         logging.info("%s Input contains %s unique proteins", job_id, str(len(input_proteins)))
         df_bg = pd.read_csv(path_to_data + 'A_article_' + database + '_' + 'unweighted' + '.tsv', sep='\t')
         A = df_bg[(df_bg.bait.isin(list(df_input.iloc[:, 0]))) | (df_bg.prey.isin(list(df_input.iloc[:, 0])))].rename(
@@ -315,8 +332,25 @@ def process_data(query, database, job_dir, job_id):
         json.dump(output, file_out, default=custom_serializer)
     logging.info("%s Results created in '%s'", job_id, f'{job_dir}{ints_outfile}')
 
+    with open(f'{job_dir}{summary_outfile}', 'wt') as file_out:
+        file_out.write(f"databases={databases[database]}\n")
+        file_out.write(f"nr_pairs={nr_pairs}\n")
+        file_out.write(f"nr_proteins={nr_proteins}\n")
+    logging.info("%s Summary file created in '%s'", job_id, f'{job_dir}{summary_outfile}')
+
     return
 
+@this_app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            # Append a timestamp to the query string of the URL
+            values['q'] = int(time.time())
+    return url_for(endpoint, **values)
 
 @this_app.route('/')
 @this_app.route("/index")
@@ -394,13 +428,36 @@ def task_status(job_id, task_id):
 @this_app.route('/results/<job_id>_<task_id>')
 def results(job_id, task_id):
 
-    return render_template(template["results"],
-                           job_id=job_id,
-                           task_id=task_id,
-                           graph_json=f'jobs/job_{job_id}/mygraph.json',
-                           ints_json=f'jobs/job_{job_id}/myresults.json',
-                           columns=mycolumns,
-                           title='Your scored results')
+    response = make_response(
+        render_template(
+            template["results"],
+            job_id=job_id,
+            task_id=task_id,
+            graph_json=f'jobs/job_{job_id}/{graph_outfile}',
+            ints_json=f'jobs/job_{job_id}/{ints_outfile}',
+            columns=mycolumns,
+            title='Your scored results')
+    )
+
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+
+@this_app.route('/params/<job_id>')
+def params(job_id):
+    try:
+        with open(f'{output_dir}/job_{job_id}/{summary_outfile}', 'r') as file:
+            params = file.read().split('\n')
+            params_dict = {param.split('=')[0]: param.split('=')[1] for param in params if param}
+            return jsonify(params_dict)
+    except FileNotFoundError:
+        logging.error(f'"jobs/job_{job_id}/{summary_outfile}" not found.')
+        return jsonify({'error': 'Parameter file not found'}), 404
+    except Exception as e:
+        logging.error(f'Error reading "jobs/job_{job_id}/{summary_outfile}": {str(e)}')
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

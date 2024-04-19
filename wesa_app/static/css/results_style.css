@@ -29,45 +29,31 @@
 }
 
 .collap-section {
-  font-family: Nunito,Helvetica,Arial,sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  background-color: #2c2c2c;
-   /* #5F6A6A; */
-  padding: 10px 0px 10px 8px;
-  color: #FFF;
-  width: 100%;
+  width: 92%;
+  height: auto;
+  margin: 0 auto;
+  position: relative;
   border: none;
+  padding: 10px 0 10px 0;
+  font-size: 13px;
+  color: #000;
   text-align: left;
   cursor: pointer;
-  border-bottom: 0.5px solid #FFF;
-}
-.collap-active, .collap-section:hover{
-  background-color: #e44445;
-  /* #2c2c2c; */
-}
-.collap-section:after {
-  content: '\002B'; /* Unicode character for "plus" sign (+) */
-  font-size: 16px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  padding-right: 5px;
-}
-.collap-active:after {
-  content: "\2212"; /* Unicode character for "minus" sign (-) */
+  /*box-shadow: 0 1px 5px rgba(0,0,0,0.1);*/
 }
 
 .collap-content {
+  background-color: #FFFFFF;
+  width: 92%;
+  height: auto;
+  margin: 0 auto;
+  position: relative;
   padding-left: 8px;
-  padding-top: 5px;
+  padding-top: 8px;
   overflow: hidden;
-  display:none;
   margin-bottom: 6px;
   padding-bottom: 6px;
-  border-bottom: 0.5px solid #CCC;
-  /* max-height: 0;
-  transition: max-height 0.2s ease-out; */
+  border: 1px solid #d6d6d6;
 }
 
 
@@ -75,7 +61,7 @@
   display: flex;
   height: 82vh;
   width: 98vw;
-  border: 1px solid #d6d6d6;
+  /*border: 1px solid #CCC;*/
   border-radius: 4px;
 }
 
@@ -83,8 +69,10 @@
   width: 20em;
   overflow: auto;
   overflow-x: auto;
-  background-color: #fff;
-  border-right: 1px solid #ccc;
+  background-color: #f1f1f1;
+  border-top: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  border-left: 1px solid #CCC;
   padding-bottom: 10px;
   text-align: left;
   font-size: 14px;
@@ -109,7 +97,7 @@
   flex-grow: 2;
   position: relative;
   background-color: white;
-  /* border: 1px solid #ccc; */
+  border: 1px solid #ccc;
 }
 
 #cy {
@@ -262,36 +250,11 @@
 .section-header {
   font-size: 15px;
   font-weight: bold;
-  margin-top: 50px;
+  margin-top: 15px;
   margin-left: 10px;
   margin-bottom: 10px;
 }
-/* .section-header:after {
-  content:"";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.5em;
-  border-top: 1px solid #2c2c2c;
-  z-index: -1;
-} */
 
-/* h2 {
-  position: relative;
-}
-h2 span {
-  padding-right: 10px;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  background-color: #272727;
-} */
-
-
-
-
-/* /// */
 
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
@@ -385,7 +348,7 @@ span .tip {
 }
 
 .qtip table, th, td {
-  border: 0px 0px 1px 0px solid black;
+  border: 1px solid black;
   border-collapse: collapse;
 }
 .qtip tr {
@@ -462,16 +425,6 @@ span .tip {
 }
 
 
-.echart {
-  width:30%;
-  height:250px;
-  margin:auto;
-  background-color: #F3F3F3;
-  border: 1px solid #898989;
-  border-radius: 4px;
-}
-
-
 #goToTop {
   display: none;
   position: fixed;
@@ -499,38 +452,77 @@ li {
   padding-left: 5px;
 }
 
-.comma-list{
-  display: inline;
-  list-style: none;
-  padding: 0px
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  background-color: #f1f1f1;
 }
-.comma-list li {
-  display: inline;
-}
-/* .comma-list li::after {
-  content: ", ";
-}
-.comma-list li:last-child::after {
-    content: "";
-} */
 
-.miss-btn {
-  border: 1px solid #2c2c2c;
-  border-radius: 3px;
-  color: #fff;
-  background-color: #4d4b4a;
-  font-size: 16px;
-  /*padding: 10px 15px;*/
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: 2px solid transparent;
+  outline: none;
   cursor: pointer;
-  display: inline-block;
-}
-.miss-btn:hover {
-  background-color: #e44445;
+  padding: 10px 20px;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Smooth transitions for color and shadow */
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* subtle shadow for 3D effect */
 }
 
-.miss-btn-on {
-  background-color: #e44445;
+/* Change background color and border of buttons on hover */
+.tab button:hover {
+  background-color: #ddd; /* Light grey background on hover */
+  border-color: #aaa; /* Darker border on hover for contrast */
 }
-.miss-btn-on:hover {
-  background-color: #4d4b4a;
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #e44445; /* Darker grey for active tab */
+  color: white;
+  border-bottom: 2px solid #fff; /* White border at the bottom to create a 'tab is open' visual effect */
+  border-top: 2px solid #ccc; /* Same as background to blend */
+  border-left: 2px solid #ccc; /* Same as background to blend */
+  border-right: 2px solid #ccc; /* Same as background to blend */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* more pronounced shadow for active tab */
+}
+
+/* Style the tab content (hidden by default, shown when active) */
+.tabcontent {
+  display: none;
+  padding-top: 10px;
+  /*border: 1px solid #ccc;*/
+  border-top: none; /* Hide the top border to merge tab with content visually */
+  background-color: #fff; /* White background for content to stand out */
+}
+
+@media (max-width: 600px) {
+  .tab button {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+}
+
+#summary {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+#summary h3{
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#summary span {
+    font-weight: bold;
+}
+
+#summary br {
+    margin-bottom: 5px;
 }
