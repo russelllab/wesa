@@ -6,7 +6,7 @@ Tool for improving affinity proteomics data.
 WeSA (weighted socioaffinity) is a novel statistical score which can be used to rank proteomics experiments results of the bait-prey type (e.g. affinity purification, immunoprecipitation or proximity labelling) and help distinguishing true protein-protein interactions from the noise. 
 
 We have implemented WeSA as a web application that can be used to rank and filter any list of protein-protein interactions. 
-WeSA is freely available and open to all users without login requirement at [wesa.russelllab.org](wesa.russelllab.org).
+WeSA is freely available and open to all users without login requirement at [wesa.russelllab.org](https://wesa.russelllab.org).
 
 Results are presented in an interactive network that allows the user to filter out the low ranked interactions, 
 as well as in a table that contains all interacting protein pairs together with their WeSA score and which can be downloaded for further analysis.
