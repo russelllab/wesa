@@ -1,37 +1,14 @@
-amqp==5.2.0
-billiard==3.6.4.0
-cached-property==1.5.2
-celery>=5.2.2
-click==7.1.2
-click-didyoumean==0.3.0
-click-plugins==1.1.1
-click-repl==0.3.0
-cycler==0.11.0
-dataclasses==0.8
-Flask==3.1.3
-importlib-metadata==4.8.3
-itsdangerous==2.0.1
-Jinja2==3.1.6
-joblib>=1.2.0
-kiwisolver==1.3.1
-kombu==5.1.0
-MarkupSafe==2.0.1
-matplotlib==3.3.4
+celery[redis]>=5.2.2
+Flask>=3.1.3
+matplotlib
 numpy>=1.22
-pandas==1.1.5
-pickle5==0.0.12
-Pillow==12.3.0
-prompt-toolkit==3.0.36
-pyparsing==3.1.2
-python-dateutil==2.9.0.post0
-python-dotenv==1.2.2
-pytz==2024.1
+pandas<4
+python-dotenv>=1.2.2
 scikit-learn>=1.5.0
-scipy==1.5.4
-six==1.16.0
-threadpoolctl==3.1.0
-typing_extensions==4.1.1
-vine==5.1.0
-wcwidth==0.2.13
-Werkzeug==3.1.6
-zipp>=3.19.1
+scipy
+
+# Not imported directly; listed only to enforce minimum versions with security fixes
+Jinja2>=3.1.6  # via Flask
+joblib>=1.2.0  # via scikit-learn
+Pillow>=13.0.0  # via matplotlib
+Werkzeug>=3.1.6  # via Flask

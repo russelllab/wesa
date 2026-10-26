@@ -23,7 +23,7 @@ Precision = 0.98).
 ## Setup & Configuration
 
 ### Requirements
-WeSA requires Python3.6 or higher. We recommend using a virtual environment to install the required packages, e.g.:
+WeSA requires Python 3.11 or higher (tested with 3.12). We recommend using a virtual environment to install the required packages, e.g.:
 ```shell
 source my_env/bin/activate
 pip install -r wesa/requirements.txt
