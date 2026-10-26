@@ -6,7 +6,7 @@ import logging
 import time
 import pandas as pd
 import numpy as np
-import pickle5 as pickle
+import pickle
 from flask import Flask, request, render_template, redirect, url_for, jsonify, make_response, session
 from celery import Celery
 from dotenv import dotenv_values

@@ -6,7 +6,7 @@ from itertools import compress, combinations
 from scipy.stats import chi2, binom
 from sklearn import metrics
 from collections import Counter
-import pickle5 as pickle
+import pickle
 
 
 def generate_job_id():
@@ -104,7 +104,7 @@ def compute_spoke_ij_conf_weighted(data, use_conf = True, do_conf_intervals = Fa
         s['SE'] = np.sqrt((s.iloc[:,4:6].prod(axis=1)).multiply(total_purifications)).multiply(s.iloc[:,3].multiply(1-s.iloc[:,3]))
         s['s_high'] = np.log(s['O_spoke'].div(binom.ppf(0.05, (s.iloc[:,4:6].prod(axis=1)).multiply(total_purifications), s.iloc[:,3])))
         s['s_low'] = np.log(s['O_spoke'].div(binom.ppf(0.95, (s.iloc[:,4:6].prod(axis=1)).multiply(total_purifications), s.iloc[:,3])))
-        s.replace([np.inf, -np.inf], np.nan, inplace=True)
+        s = s.replace([np.inf, -np.inf], np.nan)
         s['s_high'] = s['s_high'].fillna(np.log(s['O_spoke'].div((s.iloc[:,3:6].prod(axis=1)).multiply(total_purifications)-1.64*s['SE'])))
         s['s_low'] = s['s_low'].fillna(np.log(s['O_spoke'].div((s.iloc[:,3:6].prod(axis=1)).multiply(total_purifications)+1.64*s['SE'])))
         s['Lambda_high'] = s['O_spoke']*s['s_high']
@@ -256,7 +256,7 @@ def add_to_A(small_s_of_interest, s, new_matr_list):
         # A[['s_ij_lrs','s_ji_lrs']] = A[['s_ij_lrs','s_ji_lrs']]*total_purifications
         # A['Lambda_ij'] = A[['s_ij_lrs','s_ji_lrs', 'm_ij_lrs']].sum(axis=1)
 
-        A.replace([np.inf, -np.inf], np.nan, inplace=True)
+        A = A.replace([np.inf, -np.inf], np.nan)
         A = A.dropna(subset=["a_ij", "Lambda_ij"], how="all")
         A = A.fillna(0)
 
@@ -315,12 +315,12 @@ def create_A_dict_v(data, fn_path_to_A, fn_matr_dict={}, fn_matr_list={},
     result = result0[['bait', 'identifier', 'n_i_prey']].rename(
         columns={'identifier': 'interaction ID', 'n_i_prey': 'preys'})
     n_id_prey = result.groupby(['bait', 'interaction ID']).sum()
-    n_id_prey.reset_index(level=[0, 1], inplace=True)
+    n_id_prey = n_id_prey.reset_index(level=[0, 1])
 
     n_prey = pd.DataFrame(
         {'bait': n_id_prey['bait'], 'term': (n_id_prey['preys'].mul(n_id_prey['preys'].subtract(1))).div(2)})
     n_prey = n_prey.groupby(['bait']).sum()
-    n_prey.reset_index(level=0, inplace=True)
+    n_prey = n_prey.reset_index(level=0)
 
     total_sum = sum(n_prey['term'])
 
@@ -393,7 +393,7 @@ def create_A_dict_v(data, fn_path_to_A, fn_matr_dict={}, fn_matr_list={},
     A = A[['bait', 'prey', 'a_ij', 'Lambda_ij'] + [c for c in A if c not in ['bait', 'prey', 'a_ij',
                                                                              'Lambda_ij']]]  # , 'O_spoke_x', 'E_spoke_x', 'O_spoke_y', 'E_spoke_y', 'O_matrix', 'E_matrix'
 
-    A.replace([np.inf, -np.inf], np.nan, inplace=True)
+    A = A.replace([np.inf, -np.inf], np.nan)
     A = A.dropna(subset=["a_ij", "Lambda_ij"], how="all")
     A = A.fillna(0)
 
@@ -501,10 +501,10 @@ def create_matr_list(data, prey_id_dict):
 def sa_hist(bool_doubled, mydata, hist_range_min, hist_range_max, bool_chi_lines, chi_lines_df_list, bool_plot_sa,
             bool_density):
     plt.hist(mydata['Lambda_ij'], bins=range(hist_range_min, hist_range_max), log=False, density=bool_density,
-             alpha=0.6, rwidth=1, label='$\Lambda$ / 2')
+             alpha=0.6, rwidth=1, label=r'$\Lambda$ / 2')
     if bool_doubled == True:
         plt.hist(2 * mydata['Lambda_ij'], bins=range(hist_range_min, hist_range_max), log=False, density=bool_density,
-                 alpha=0.6, rwidth=1, label='$\Lambda$')
+                 alpha=0.6, rwidth=1, label=r'$\Lambda$')
     x = np.arange(0.001, 100, 0.001)  # x-axis ranges from 0 to 100 with .001 steps
     if bool_chi_lines == True:
         for i in chi_lines_df_list:
